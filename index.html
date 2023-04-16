@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        font-family: "Press Start 2P", cursive;
+        box-sizing: border-box;
+      }
+      body {
+        background: #000;
+      }
+      canvas {
+        background: #eeeeff;
+        width: 960px;
+        height: 640px;
+      }
+
+      button {
+        border: 0;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"> </canvas>
+    <div
+      id="dialogueBox"
+      style="
+        background-color: white;
+        height: 180px;
+        position: absolute;
+        bottom: 0;
+        left: 8px;
+        right: 0;
+        top: 480px;
+        border-top: 4px black solid;
+        display: flex;
+        width: 960px;
+        display: none;
+      "
+    >
+      <div
+        style="
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background-color: white;
+          padding: 12px;
+          cursor: pointer;
+        "
+      >
+        sdkfjlsdajl
+      </div>
+      <div
+        id="attacksBox"
+        style="
+          width: 66.66%;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+        "
+      ></div>
+    </div>
+  </body>
+  <!-- <script src="data/audio.js"></script> -->
+  <script src="data/collisions.js"></script>
+  <!-- <script src="data/attacks.js"></script> -->
+  <!-- <script src="data/monsters.js"></script> -->
+  <script src="data/characters.js"></script>
+  <script src="data/objects.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="classes.js"></script>
+  <script src="index.js"></script>
+</html>
