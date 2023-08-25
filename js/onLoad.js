@@ -1,3 +1,6 @@
+import { Sprite } from "../classes.js";
+import { Boundary } from "../classes.js";
+import { collisions } from "../data/collisions.js";
 const loadCollisions = (collisionObjects) => {
   const collisionsMap = [];
   for (let i = 0; i < 570; i += 30) {
@@ -16,7 +19,7 @@ const loadCollisions = (collisionObjects) => {
 
   collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
-      if (symbol != 0)
+      if (symbol != 0) {
         boundaries.push(
           new Boundary({
             position: {
@@ -25,14 +28,116 @@ const loadCollisions = (collisionObjects) => {
             },
           })
         );
+      }
     });
   });
 
   return boundaries;
 };
 
-export default loadCollisions;
+export const loadRenderables = (chapter) => {
+  const characters = [];
+  const boundaries = loadCollisions(collisions[chapter.collisions_name]);
+  const backgroundImage = new Image();
+  backgroundImage.src = `../assets/${chapter.background}`;
 
-const loadCharacters = () => {};
+  const foregroundImage = new Image();
+  // foregroundImage.src = "./img/foregroundObjects.png";
 
-const loadMap = () => {};
+  const playerDownImage = new Image();
+  playerDownImage.src = "../assets/playerDown.png";
+
+  const playerUpImage = new Image();
+  playerUpImage.src = "../assets/playerUp.png";
+
+  const playerLeftImage = new Image();
+  playerLeftImage.src = "../assets/playerLeft.png";
+
+  const playerRightImage = new Image();
+  playerRightImage.src = "../assets/playerRight.png";
+
+  const player = new Sprite({
+    position: chapter.player.position,
+    image: playerDownImage,
+    frames: {
+      max: 4,
+      hold: 10,
+    },
+    sprites: {
+      up: playerUpImage,
+      left: playerLeftImage,
+      right: playerRightImage,
+      down: playerDownImage,
+    },
+    scale: 0.5,
+  });
+
+  const background = new Sprite({
+    position: {
+      x: 0,
+      y: 0,
+    },
+    // position: {
+    //   x: offset.x,
+    //   y: offset.y,
+    // },
+    image: backgroundImage,
+  });
+
+  // const foreground = new Sprite({
+  //   position: {
+  //     x: offset.x,
+  //     y: offset.y,
+  //   },
+  //   image: foregroundImage,
+  // });
+
+  chapter.characters.forEach((character) => {
+    const playerDownImage = new Image();
+    playerDownImage.src = "../assets/playerDown.png";
+
+    const playerUpImage = new Image();
+    playerUpImage.src = "../assets/playerUp.png";
+
+    const playerLeftImage = new Image();
+    playerLeftImage.src = "../assets/playerLeft.png";
+
+    const playerRightImage = new Image();
+    playerRightImage.src = "../assets/playerRight.png";
+    const characterImages = {
+      up: playerUpImage,
+      down: playerDownImage,
+      left: playerLeftImage,
+      right: playerLeftImage,
+    };
+    characters.push(
+      new Sprite({
+        position: character.position,
+        image: characterImages[character.direction],
+        frames: {
+          max: 4,
+          hold: 10,
+        },
+        sprites: {
+          ...characterImages,
+        },
+        scale: 0.5,
+        interaction: character.interaction,
+        name: character.name,
+      })
+    );
+  });
+  return {
+    toRender: [
+      background,
+      ...boundaries,
+      // ...battleZones,
+      ...characters,
+      // foreground,
+      player,
+    ],
+    player,
+    boundaries,
+    characters,
+  };
+};

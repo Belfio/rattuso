@@ -1,4 +1,8 @@
-class Sprite {
+export const canvas = document.querySelector("canvas");
+export const doc = document;
+export const c = canvas.getContext("2d");
+
+export class Sprite {
   constructor({
     position,
     velocity,
@@ -8,6 +12,8 @@ class Sprite {
     animate = false,
     rotation = 0,
     scale = 1,
+    interaction,
+    name,
   }) {
     this.position = position;
     this.image = new Image();
@@ -24,6 +30,10 @@ class Sprite {
 
     this.rotation = rotation;
     this.scale = scale;
+    this.interactionAsset = {};
+    this.interacting = false;
+    this.interaction = interaction;
+    this.name = name;
   }
 
   draw() {
@@ -227,7 +237,7 @@ class Monster extends Sprite {
   }
 }
 
-class Boundary {
+export class Boundary {
   static width = 32;
   static height = 32;
   constructor({ position }) {
