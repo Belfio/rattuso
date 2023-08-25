@@ -6,10 +6,12 @@
       href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
+    <link href="./styles/main.css" rel="stylesheet" />
     <style>
       * {
         font-family: "Press Start 2P", cursive;
         box-sizing: border-box;
+        font-size: 18px;
       }
       body {
         background: #000;
@@ -33,53 +35,81 @@
   </head>
   <body>
     <canvas id="canvas"> </canvas>
+    <div id="dialogueBox">
+      <div id="dialogueBoxText">testo_game</div>
+      <div id="answerOptionsWrapper">
+        <div id="dialogueBoxTextResponse" class="answerOption selectedAnswer">
+          Risposta una
+        </div>
+        <div id="dialogueBoxTextResponse" class="answerOption">
+          Risposta due
+        </div>
+        <div id="dialogueBoxTextResponse" class="answerOption">
+          Risposta tre
+        </div>
+        <div id="dialogueBoxTextResponse" class="answerOption">
+          Risposta quattro
+        </div>
+      </div>
+    </div>
     <div
-      id="dialogueBox"
+      id="comic_div"
       style="
-        background-color: white;
-        height: 180px;
-        position: absolute;
-        bottom: 0;
-        left: 8px;
-        right: 0;
-        top: 480px;
-        border-top: 4px black solid;
-        display: flex;
+        top: 8px;
         width: 960px;
-        display: none;
+        height: 652px;
+        /* background: magenta; */
+        /* opacity: 0.5; */
+        position: absolute;
+        overflow: hidden;
       "
     >
+      <img id="comic_background" src="./assets/d_casa.jpg" style="" />
       <div
         style="
-          position: absolute;
           top: 0;
+          width: 960px;
+          height: 652px;
+          background: yellow;
+          opacity: 0.5;
+          position: absolute;
+        "
+      ></div>
+
+      <div
+        id="dialogue_box_comic"
+        style="
+          position: absolute;
+          top: 400px;
           right: 0;
           bottom: 0;
           left: 0;
           background-color: white;
-          padding: 12px;
+          padding: 24px;
           cursor: pointer;
+          opacity: 0.9;
+          border-top: black;
+          border-style: solid;
+          border-width: 5px;
         "
       >
-        sdkfjlsdajl
+        <span
+          style="position: relative; font-size: 24px; font-weight: bold"
+          id="dialogue_box_comic_title"
+          >RATTUSO</span
+        ><br />
+        <span id="dialogue_box_comic_text"> testo_comic_text </span>
       </div>
-      <div
-        id="attacksBox"
-        style="
-          width: 66.66%;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-        "
-      ></div>
     </div>
   </body>
   <!-- <script src="data/audio.js"></script> -->
-  <script src="data/collisions.js"></script>
+  <!-- <script src="data/collisions.js"></script> -->
   <!-- <script src="data/attacks.js"></script> -->
   <!-- <script src="data/monsters.js"></script> -->
   <script src="data/characters.js"></script>
   <script src="data/objects.js"></script>
   <script src="js/utils.js"></script>
-  <script src="classes.js"></script>
-  <script src="index.js"></script>
+  <!-- <script type="module" src="js/onLoad.js"></script> -->
+  <script src="classes.js" type="module"></script>
+  <script src="index.js" type="module"></script>
 </html>

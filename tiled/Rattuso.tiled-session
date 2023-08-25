@@ -3,8 +3,9 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "casa.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         "/Users/alfredo/Downloads/Tiled/Pellet Town.tmx": {
@@ -21,14 +22,30 @@
         "/Users/alfredo/Downloads/Tiled/pokemonStyleGameTileset.tsx": {
             "scaleInDock": 1
         },
+        "Accessory_08_Detective_Hat_32x32_03.tsx": {
+            "scaleInDock": 1
+        },
         "Basic Grass Biom things 1.tsx": {
-            "scaleInDock": 2.7075
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Body_32x32_0scuro.tsx": {
+            "scaleInDock": 1
+        },
+        "Body_32x32_clear.tsx": {
+            "scaleInDock": 1
         },
         "Grass hill tiles v.2.tsx": {
             "scaleInDock": 1
         },
+        "Hairstyle_03_32x32_06.tsx": {
+            "scaleInDock": 1
+        },
         "Interiors_16x16.tsx": {
             "scaleInDock": 1.4869
+        },
+        "Interiors_32x32.tsx": {
+            "scaleInDock": 1
         },
         "Interiors_free_16x16.tsx": {
             "scaleInDock": 1.8518
@@ -39,7 +56,19 @@
         "Modern_Office_Black_Shadow.tsx": {
             "scaleInDock": 1.3857
         },
+        "Modern_Office_Black_Shadow_32x32.tsx": {
+            "scaleInDock": 1
+        },
         "Modern_Office_Shadowless_16x16.tsx": {
+            "scaleInDock": 1
+        },
+        "Outfit_18_32x32_02.tsx": {
+            "scaleInDock": 1
+        },
+        "Room_Builder_32x32.tsx": {
+            "scaleInDock": 1
+        },
+        "Room_Builder_Office_32x32.tsx": {
             "scaleInDock": 1
         },
         "Room_Builder_free_16x16.tsx": {
@@ -47,7 +76,15 @@
             "scaleInEditor": 1
         },
         "Room_Builder_free_32x32.tsx": {
-            "scaleInDock": 0.5939
+            "scaleInDock": 1
+        },
+        "casa.tmx": {
+            "scale": 0.5053,
+            "selectedLayer": 11,
+            "viewCenter": {
+                "x": 491.7870571937463,
+                "y": 638.2347120522463
+            }
         },
         "tileset.tsx": {
             "scaleInDock": 1.0091,
@@ -62,9 +99,13 @@
     "map.tileWidth": 32,
     "map.width": 30,
     "openFiles": [
+        "casa.tmx",
+        "Basic Grass Biom things 1.tsx"
     ],
     "project": "Rattuso.tiled-project",
     "recentFiles": [
+        "Basic Grass Biom things 1.tsx",
+        "casa.tmx",
         "Room_Builder_free_16x16.tsx",
         "tileset.tsx",
         "/Users/alfredo/Downloads/Tiled/Pellet Town.tmx"
