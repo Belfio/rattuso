@@ -235,3 +235,197 @@ window.addEventListener("keyup", (e) => {
       break;
   }
 });
+
+// Mobile touch controls
+function simulateKeyPress(key) {
+  switch (key) {
+    case " ":
+      keys.space.pressed = true;
+      lastKey = " ";
+      break;
+    case "w":
+      keys.w.pressed = true;
+      lastKey = "w";
+      break;
+    case "a":
+      keys.a.pressed = true;
+      lastKey = "a";
+      break;
+    case "s":
+      keys.s.pressed = true;
+      lastKey = "s";
+      break;
+    case "d":
+      keys.d.pressed = true;
+      lastKey = "d";
+      break;
+  }
+}
+
+function simulateKeyRelease(key) {
+  switch (key) {
+    case "w":
+      keys.w.pressed = false;
+      break;
+    case "a":
+      keys.a.pressed = false;
+      break;
+    case "s":
+      keys.s.pressed = false;
+      break;
+    case "d":
+      keys.d.pressed = false;
+      break;
+    case " ":
+      keys.space.pressed = false;
+      break;
+  }
+}
+
+// Function to scroll text content on mobile - ONLY for comic scenes
+function scrollTextContent(direction) {
+  console.log('scrollTextContent called with direction:', direction);
+  const isMobile = window.innerWidth <= 768;
+  console.log('isMobile:', isMobile, 'window width:', window.innerWidth);
+
+  if (!isMobile) return false;
+
+  // Only handle scrolling in comic scenes (image on top, text on bottom)
+  const comicDiv = doc.getElementById("comic_div");
+  console.log('comicDiv display:', comicDiv ? comicDiv.style.display : 'comicDiv not found');
+
+  // Check if we're in a comic scene (image + text layout)
+  if (comicDiv && comicDiv.style.display !== "none") {
+    const comicText = doc.getElementById("dialogue_box_comic_text");
+    console.log('comicText found:', !!comicText);
+
+    if (comicText) {
+      console.log('scrollTop:', comicText.scrollTop, 'scrollHeight:', comicText.scrollHeight, 'clientHeight:', comicText.clientHeight);
+
+      if (direction === 'down') {
+        // Check if there's more content to scroll down
+        if (comicText.scrollTop < comicText.scrollHeight - comicText.clientHeight) {
+          comicText.scrollTop += 40; // Scroll down
+          console.log('Scrolled down, new scrollTop:', comicText.scrollTop);
+          return true;
+        } else {
+          console.log('Cannot scroll down - at bottom');
+        }
+      } else if (direction === 'up') {
+        // Check if we can scroll up
+        if (comicText.scrollTop > 0) {
+          comicText.scrollTop -= 40; // Scroll up
+          console.log('Scrolled up, new scrollTop:', comicText.scrollTop);
+          return true;
+        } else {
+          console.log('Cannot scroll up - at top');
+        }
+      }
+    }
+  }
+
+  console.log('No scrolling handled - returning false');
+  // For game scenes (character movement), don't handle scrolling - let normal controls work
+  return false;
+}
+
+// Prevent double-tap zoom
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+  const now = (new Date()).getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+
+// Prevent pinch zoom
+document.addEventListener('gesturestart', function (e) {
+  e.preventDefault();
+});
+
+document.addEventListener('gesturechange', function (e) {
+  e.preventDefault();
+});
+
+document.addEventListener('gestureend', function (e) {
+  e.preventDefault();
+});
+
+// Add touch event listeners for mobile controls
+document.addEventListener('DOMContentLoaded', () => {
+  const mobileButtons = document.querySelectorAll('.dpad-btn, .action-btn');
+
+  mobileButtons.forEach(button => {
+    const key = button.getAttribute('data-key');
+    let touchStartTime = 0;
+
+    // Handle touch start
+    button.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      touchStartTime = Date.now();
+
+      // Check if we should handle text scrolling instead of normal key input
+      console.log('Touch start on key:', key);
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && (key === 's' || key === 'w')) {
+        console.log('Attempting text scroll for key:', key);
+        const direction = key === 's' ? 'down' : 'up';
+        const scrollHandled = scrollTextContent(direction);
+        console.log('Scroll handled:', scrollHandled);
+        if (scrollHandled) {
+          console.log('Scroll handled - NOT simulating key press');
+          return; // Don't simulate key press if we handled scrolling
+        }
+      }
+
+      console.log('Simulating key press for:', key);
+      // Always allow action button (spacebar) to work for scene progression
+      simulateKeyPress(key);
+    });
+
+    // Handle touch end - ensure minimum duration for antiBouncer
+    button.addEventListener('touchend', (e) => {
+      e.preventDefault();
+
+      // Ensure minimum touch duration for action button to work with antiBouncer
+      const touchDuration = Date.now() - touchStartTime;
+      if (key === ' ' && touchDuration < 50) {
+        // Wait a bit longer for action button to ensure antiBouncer logic works
+        setTimeout(() => {
+          simulateKeyRelease(key);
+        }, 50 - touchDuration);
+      } else {
+        simulateKeyRelease(key);
+      }
+    });
+
+    // Handle mouse events for desktop testing
+    button.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+
+      // Check if we should handle text scrolling instead of normal key input
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && (key === 's' || key === 'w')) {
+        const direction = key === 's' ? 'down' : 'up';
+        const scrollHandled = scrollTextContent(direction);
+        if (scrollHandled) {
+          return; // Don't simulate key press if we handled scrolling
+        }
+      }
+
+      // Always allow action button (spacebar) to work for scene progression
+      simulateKeyPress(key);
+    });
+
+    button.addEventListener('mouseup', (e) => {
+      e.preventDefault();
+      simulateKeyRelease(key);
+    });
+
+    // Prevent context menu on long press
+    button.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    });
+  });
+});
