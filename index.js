@@ -47,6 +47,29 @@ function animate() {
     // load the right scene
     // load image
     comic_background.src = `./assets/${currentChapter.img}`;
+
+    // set the keyboard controls
+    if (
+      keys.space.pressed &&
+      lastKey === " " &&
+      antiBouncer > ANTI_BOUNCER_LIMIT
+    ) {
+      console.log("ACTION BUTTON PRESSED! story_index was:", story_index);
+      story_index++;
+      console.log("story_index is now:", story_index);
+      antiBouncer = 0;
+
+      // Visual debug - flash the action button
+      const actionBtn = document.getElementById("btn-action");
+      if (actionBtn) {
+        actionBtn.style.background = "red";
+        setTimeout(() => {
+          actionBtn.style.background = "rgba(255, 255, 255, 0.15)";
+        }, 200);
+      }
+    }
+
+    // Update text after button press logic
     if (story_index === 0) {
       title.innerHTML = currentChapter.title;
       dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
@@ -56,17 +79,7 @@ function animate() {
       dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
     }
 
-    // set the keyboard controls
-    if (
-      keys.space.pressed &&
-      lastKey === " " &&
-      antiBouncer > ANTI_BOUNCER_LIMIT
-    ) {
-      story_index++;
-      antiBouncer = 0;
-    }
     // set the finish command
-
     if (story_index === currentChapter.discussion.length) gameState = IDLE;
     // console.log(comic_page);
     // dialogueBox.style.display = "inline";
@@ -77,6 +90,11 @@ function animate() {
     const answersBox = doc.getElementById("answerOptionsWrapper");
     // load renderables
     if (!renderables.toRender) renderables = loadRenderables(currentChapter);
+
+    // Clear the canvas before drawing
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     renderables.toRender.forEach((renderable) => {
       renderable.draw();
     });
@@ -84,7 +102,7 @@ function animate() {
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
     if (!player.interacting) {
-      movementManager(canvas, keys, lastKey, player, boundaries, []);
+      movementManager(canvas, keys, lastKey, player, boundaries, characters);
       canv_game.style.display = "inline";
       comic_page.style.display = "none";
 
@@ -363,7 +381,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle touch start
     button.addEventListener('touchstart', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       touchStartTime = Date.now();
+
+      // Safari debugging
+      console.log('Touch start on key:', key, 'Safari:', /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent));
 
       // Check if we should handle text scrolling instead of normal key input
       console.log('Touch start on key:', key);
@@ -382,11 +404,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('Simulating key press for:', key);
       // Always allow action button (spacebar) to work for scene progression
       simulateKeyPress(key);
-    });
+    }, { passive: false });
 
     // Handle touch end - ensure minimum duration for antiBouncer
     button.addEventListener('touchend', (e) => {
       e.preventDefault();
+      e.stopPropagation();
 
       // Ensure minimum touch duration for action button to work with antiBouncer
       const touchDuration = Date.now() - touchStartTime;
@@ -397,6 +420,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 50 - touchDuration);
       } else {
         simulateKeyRelease(key);
+      }
+    }, { passive: false });
+
+    // Safari fallback - use click event as backup
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log('Click fallback triggered for key:', key);
+
+      // For Safari, sometimes touch events don't work properly, so use click as backup
+      if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
+        simulateKeyPress(key);
+        setTimeout(() => simulateKeyRelease(key), 100);
       }
     });
 
