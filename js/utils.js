@@ -89,26 +89,30 @@ export const movementManager = (
 
     if (canMove) {
       const backgroundY = background ? background.position.y : 0;
-      const backgroundX = background ? background.position.x : 0;
 
-      // Check if we're at map boundaries
-      const atMapTop = backgroundY >= 0;
-      const atMapBottom = backgroundY <= -(mapHeight - canvas.height);
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
 
-      // Always try to keep player centered by moving the map
-      // Only move player when map can't move anymore
-      if (!atMapTop) {
-        // Move map down (camera moves up)
-        renderables.forEach(renderable => {
-          if (renderable !== player) {
-            renderable.position.y += 3;
-          }
-        });
+      if (!isPlayerCentered && player.position.y > VIEWPORT_CENTER_Y) {
+        // Phase 1: Move player toward center from below, keep map still
+        player.position.y -= 3;
       } else {
-        // At map boundary, move player toward top of screen
-        const targetY = VIEWPORT_CENTER_Y * 0.3; // 30% from top
-        if (player.position.y > targetY) {
-          player.position.y -= 3;
+        // Phase 2: Player is centered, check map boundaries
+        const atMapTop = backgroundY >= 0; // Map's top edge is at or past screen top
+
+        if (!atMapTop) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.y += 3;
+            }
+          });
+        } else {
+          // Map is at top boundary - now move player toward top edge
+          const minY = 10; // Minimum distance from top edge
+          if (player.position.y > minY) {
+            player.position.y -= 3;
+          }
         }
       }
     }
@@ -145,21 +149,29 @@ export const movementManager = (
     if (canMove) {
       const backgroundX = background ? background.position.x : 0;
 
-      // Check if we're at map boundaries
-      const atMapLeft = backgroundX >= 0;
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
 
-      if (!atMapLeft) {
-        // Move map right (camera moves left)
-        renderables.forEach(renderable => {
-          if (renderable !== player) {
-            renderable.position.x += 3;
-          }
-        });
+      if (!isPlayerCentered && player.position.x > VIEWPORT_CENTER_X) {
+        // Phase 1: Move player toward center from the right, keep map still
+        player.position.x -= 3;
       } else {
-        // At map boundary, move player toward left side of screen
-        const targetX = VIEWPORT_CENTER_X * 0.3; // 30% from left
-        if (player.position.x > targetX) {
-          player.position.x -= 3;
+        // Phase 2: Player is centered, check map boundaries
+        const atMapLeft = backgroundX >= 0; // Map's left edge is at or past screen left
+
+        if (!atMapLeft) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.x += 3;
+            }
+          });
+        } else {
+          // Map is at left boundary - now move player toward left edge
+          const minX = 10; // Minimum distance from left edge
+          if (player.position.x > minX) {
+            player.position.x -= 3;
+          }
         }
       }
     }
@@ -190,21 +202,29 @@ export const movementManager = (
     if (canMove) {
       const backgroundY = background ? background.position.y : 0;
 
-      // Check if we're at map boundaries
-      const atMapBottom = backgroundY <= -(mapHeight - canvas.height);
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
 
-      if (!atMapBottom) {
-        // Move map up (camera moves down)
-        renderables.forEach(renderable => {
-          if (renderable !== player) {
-            renderable.position.y -= 3;
-          }
-        });
+      if (!isPlayerCentered && player.position.y < VIEWPORT_CENTER_Y) {
+        // Phase 1: Move player toward center from above, keep map still
+        player.position.y += 3;
       } else {
-        // At map boundary, move player toward bottom of screen
-        const targetY = VIEWPORT_CENTER_Y * 1.7; // 70% from top
-        if (player.position.y < targetY && player.position.y < canvas.height - player.height) {
-          player.position.y += 3;
+        // Phase 2: Player is centered, check map boundaries
+        const atMapBottom = backgroundY <= -(mapHeight - canvas.height); // Map's bottom edge is at or past screen bottom
+
+        if (!atMapBottom) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.y -= 3;
+            }
+          });
+        } else {
+          // Map is at bottom boundary - now move player toward bottom edge
+          const maxY = canvas.height - 50; // Minimum distance from bottom edge
+          if (player.position.y < maxY) {
+            player.position.y += 3;
+          }
         }
       }
     }
@@ -241,21 +261,29 @@ export const movementManager = (
     if (canMove) {
       const backgroundX = background ? background.position.x : 0;
 
-      // Check if we're at map boundaries
-      const atMapRight = backgroundX <= -(mapWidth - canvas.width);
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
 
-      if (!atMapRight) {
-        // Move map left (camera moves right)
-        renderables.forEach(renderable => {
-          if (renderable !== player) {
-            renderable.position.x -= 3;
-          }
-        });
+      if (!isPlayerCentered && player.position.x < VIEWPORT_CENTER_X) {
+        // Phase 1: Move player toward center from the left, keep map still
+        player.position.x += 3;
       } else {
-        // At map boundary, move player toward right side of screen
-        const targetX = VIEWPORT_CENTER_X * 1.7; // 70% from left
-        if (player.position.x < targetX && player.position.x < canvas.width - player.width) {
-          player.position.x += 3;
+        // Phase 2: Player is centered, check map boundaries
+        const atMapRight = backgroundX <= -(mapWidth - canvas.width); // Map's right edge is at or past screen right
+
+        if (!atMapRight) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.x -= 3;
+            }
+          });
+        } else {
+          // Map is at right boundary - now move player toward right edge
+          const maxX = canvas.width - 50; // Minimum distance from right edge
+          if (player.position.x < maxX) {
+            player.position.x += 3;
+          }
         }
       }
     }

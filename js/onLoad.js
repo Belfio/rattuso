@@ -36,48 +36,52 @@ const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
 export const loadRenderables = (chapter) => {
   const characters = [];
 
-  // For camera system, start player near center of viewport
+  // For camera system, position player and background correctly
   const canvas = document.querySelector("canvas");
-  const playerStartX = canvas.width / 2 - 16; // Center minus half player width
-  const playerStartY = canvas.height / 2 - 16; // Center minus half player height
+  const viewportCenterX = canvas.width / 2 - 16; // Center minus half player width
+  const viewportCenterY = canvas.height / 2 - 16; // Center minus half player height
 
   // Get background image dimensions to prevent grey canvas exposure
   const backgroundImage = new Image();
   backgroundImage.src = `../assets/${chapter.background}`;
 
-  // Offset background so player appears at the correct world position
-  // But ensure background never exposes grey canvas areas
+  // Player's world position from chapter data
   const originalPlayerX = chapter.player.position.x;
   const originalPlayerY = chapter.player.position.y;
-  let backgroundOffsetX = playerStartX - originalPlayerX;
-  let backgroundOffsetY = playerStartY - originalPlayerY;
+
+  // Calculate ideal background offset to center player
+  let idealBackgroundOffsetX = viewportCenterX - originalPlayerX;
+  let idealBackgroundOffsetY = viewportCenterY - originalPlayerY;
 
   // Clamp background offset to prevent grey canvas exposure
-  // This ensures the background always covers the entire viewport
-  function clampBackgroundOffset() {
-    // Default map size if image not loaded yet
-    const mapWidth = 960; // Will be updated when image loads
-    const mapHeight = 640; // Will be updated when image loads
+  function clampBackgroundOffset(offsetX, offsetY) {
+    const mapWidth = 960; // Default, will be updated when image loads
+    const mapHeight = 640;
 
-    // Don't let background move too far right (left edge visible)
-    if (backgroundOffsetX > 0) {
-      backgroundOffsetX = 0;
+    // Clamp X offset
+    let clampedX = offsetX;
+    if (clampedX > 0) {
+      clampedX = 0; // Don't show left edge
     }
-    // Don't let background move too far left (right edge visible)
-    if (backgroundOffsetX < -(mapWidth - canvas.width) && mapWidth > canvas.width) {
-      backgroundOffsetX = -(mapWidth - canvas.width);
+    if (mapWidth > canvas.width && clampedX < -(mapWidth - canvas.width)) {
+      clampedX = -(mapWidth - canvas.width); // Don't show right edge
     }
-    // Don't let background move too far down (top edge visible)
-    if (backgroundOffsetY > 0) {
-      backgroundOffsetY = 0;
+
+    // Clamp Y offset
+    let clampedY = offsetY;
+    if (clampedY > 0) {
+      clampedY = 0; // Don't show top edge
     }
-    // Don't let background move too far up (bottom edge visible)
-    if (backgroundOffsetY < -(mapHeight - canvas.height) && mapHeight > canvas.height) {
-      backgroundOffsetY = -(mapHeight - canvas.height);
+    if (mapHeight > canvas.height && clampedY < -(mapHeight - canvas.height)) {
+      clampedY = -(mapHeight - canvas.height); // Don't show bottom edge
     }
+
+    return { x: clampedX, y: clampedY };
   }
 
-  clampBackgroundOffset();
+  const clampedOffset = clampBackgroundOffset(idealBackgroundOffsetX, idealBackgroundOffsetY);
+  const backgroundOffsetX = clampedOffset.x;
+  const backgroundOffsetY = clampedOffset.y;
 
   const boundaries = loadCollisions(collisions[chapter.collisions_name], backgroundOffsetX, backgroundOffsetY);
 
@@ -96,12 +100,29 @@ export const loadRenderables = (chapter) => {
   const playerRightImage = new Image();
   playerRightImage.src = "../assets/playerRight.png";
 
-  // Adjust player position based on clamped background offset
-  const adjustedPlayerX = originalPlayerX + backgroundOffsetX;
-  const adjustedPlayerY = originalPlayerY + backgroundOffsetY;
+  // Calculate final player screen position
+  // If we can center the player (background wasn't clamped), player goes to center
+  // If we can't center (background was clamped), player appears offset from center
+  let finalPlayerX, finalPlayerY;
+
+  if (idealBackgroundOffsetX === backgroundOffsetX) {
+    // Background wasn't clamped horizontally - player can be centered
+    finalPlayerX = viewportCenterX;
+  } else {
+    // Background was clamped - calculate player's screen position
+    finalPlayerX = originalPlayerX + backgroundOffsetX;
+  }
+
+  if (idealBackgroundOffsetY === backgroundOffsetY) {
+    // Background wasn't clamped vertically - player can be centered
+    finalPlayerY = viewportCenterY;
+  } else {
+    // Background was clamped - calculate player's screen position
+    finalPlayerY = originalPlayerY + backgroundOffsetY;
+  }
 
   const player = new Sprite({
-    position: { x: adjustedPlayerX, y: adjustedPlayerY },
+    position: { x: finalPlayerX, y: finalPlayerY },
     image: playerDownImage,
     frames: {
       max: 4,
