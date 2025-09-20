@@ -102,7 +102,7 @@ function animate() {
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
     if (!player.interacting) {
-      movementManager(canvas, keys, lastKey, player, boundaries, characters);
+      movementManager(canvas, keys, lastKey, player, boundaries, characters, renderables.toRender);
       canv_game.style.display = "inline";
       comic_page.style.display = "none";
 

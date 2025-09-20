@@ -1,7 +1,7 @@
 import { Sprite } from "../classes.js";
 import { Boundary } from "../classes.js";
 import { collisions } from "../data/collisions.js";
-const loadCollisions = (collisionObjects) => {
+const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
   const collisionsMap = [];
   for (let i = 0; i < 570; i += 30) {
     collisionsMap.push(
@@ -12,10 +12,6 @@ const loadCollisions = (collisionObjects) => {
     );
   }
   const boundaries = [];
-  const offset = {
-    x: 0,
-    y: 0,
-  };
 
   collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
@@ -23,8 +19,8 @@ const loadCollisions = (collisionObjects) => {
         boundaries.push(
           new Boundary({
             position: {
-              x: j * Boundary.width + offset.x,
-              y: i * Boundary.height + offset.y,
+              x: j * Boundary.width + offsetX,
+              y: i * Boundary.height + offsetY,
             },
           })
         );
@@ -37,7 +33,19 @@ const loadCollisions = (collisionObjects) => {
 
 export const loadRenderables = (chapter) => {
   const characters = [];
-  const boundaries = loadCollisions(collisions[chapter.collisions_name]);
+
+  // For camera system, start player near center of viewport
+  const canvas = document.querySelector("canvas");
+  const playerStartX = canvas.width / 2 - 16; // Center minus half player width
+  const playerStartY = canvas.height / 2 - 16; // Center minus half player height
+
+  // Offset background so player appears at the correct world position
+  const originalPlayerX = chapter.player.position.x;
+  const originalPlayerY = chapter.player.position.y;
+  const backgroundOffsetX = playerStartX - originalPlayerX;
+  const backgroundOffsetY = playerStartY - originalPlayerY;
+
+  const boundaries = loadCollisions(collisions[chapter.collisions_name], backgroundOffsetX, backgroundOffsetY);
   const backgroundImage = new Image();
   backgroundImage.src = `../assets/${chapter.background}`;
 
@@ -57,7 +65,7 @@ export const loadRenderables = (chapter) => {
   playerRightImage.src = "../assets/playerRight.png";
 
   const player = new Sprite({
-    position: chapter.player.position,
+    position: { x: playerStartX, y: playerStartY },
     image: playerDownImage,
     frames: {
       max: 4,
@@ -74,13 +82,9 @@ export const loadRenderables = (chapter) => {
 
   const background = new Sprite({
     position: {
-      x: 0,
-      y: 0,
+      x: backgroundOffsetX,
+      y: backgroundOffsetY,
     },
-    // position: {
-    //   x: offset.x,
-    //   y: offset.y,
-    // },
     image: backgroundImage,
   });
 
@@ -112,7 +116,10 @@ export const loadRenderables = (chapter) => {
     };
     characters.push(
       new Sprite({
-        position: character.position,
+        position: {
+          x: character.position.x + backgroundOffsetX,
+          y: character.position.y + backgroundOffsetY,
+        },
         image: characterImages[character.direction],
         frames: {
           max: 4,
