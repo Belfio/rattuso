@@ -93,22 +93,22 @@ export const loadRenderables = (chapter) => {
   // });
 
   chapter.characters.forEach((character) => {
-    const playerDownImage = new Image();
-    playerDownImage.src = "../assets/playerDown.png";
+    const characterDownImage = new Image();
+    characterDownImage.src = "../assets/playerDown.png";
 
-    const playerUpImage = new Image();
-    playerUpImage.src = "../assets/playerUp.png";
+    const characterUpImage = new Image();
+    characterUpImage.src = "../assets/playerUp.png";
 
-    const playerLeftImage = new Image();
-    playerLeftImage.src = "../assets/playerLeft.png";
+    const characterLeftImage = new Image();
+    characterLeftImage.src = "../assets/playerLeft.png";
 
-    const playerRightImage = new Image();
-    playerRightImage.src = "../assets/playerRight.png";
+    const characterRightImage = new Image();
+    characterRightImage.src = "../assets/playerRight.png";
     const characterImages = {
-      up: playerUpImage,
-      down: playerDownImage,
-      left: playerLeftImage,
-      right: playerLeftImage,
+      up: characterUpImage,
+      down: characterDownImage,
+      left: characterLeftImage,
+      right: characterRightImage,
     };
     characters.push(
       new Sprite({

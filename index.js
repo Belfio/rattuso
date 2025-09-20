@@ -47,6 +47,29 @@ function animate() {
     // load the right scene
     // load image
     comic_background.src = `./assets/${currentChapter.img}`;
+
+    // set the keyboard controls
+    if (
+      keys.space.pressed &&
+      lastKey === " " &&
+      antiBouncer > ANTI_BOUNCER_LIMIT
+    ) {
+      console.log("ACTION BUTTON PRESSED! story_index was:", story_index);
+      story_index++;
+      console.log("story_index is now:", story_index);
+      antiBouncer = 0;
+
+      // Visual debug - flash the action button
+      const actionBtn = document.getElementById("btn-action");
+      if (actionBtn) {
+        actionBtn.style.background = "red";
+        setTimeout(() => {
+          actionBtn.style.background = "rgba(255, 255, 255, 0.15)";
+        }, 200);
+      }
+    }
+
+    // Update text after button press logic
     if (story_index === 0) {
       title.innerHTML = currentChapter.title;
       dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
@@ -56,15 +79,6 @@ function animate() {
       dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
     }
 
-    // set the keyboard controls
-    if (
-      keys.space.pressed &&
-      lastKey === " " &&
-      antiBouncer > ANTI_BOUNCER_LIMIT
-    ) {
-      story_index++;
-      antiBouncer = 0;
-    }
     // set the finish command
 
     if (story_index === currentChapter.discussion.length) chapterType = IDLE;
@@ -77,6 +91,11 @@ function animate() {
     const answersBox = doc.getElementById("answerOptionsWrapper");
     // load renderables
     if (!renderables.toRender) renderables = loadRenderables(currentChapter);
+
+    // Clear the canvas before drawing
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     renderables.toRender.forEach((renderable) => {
       renderable.draw();
     });
@@ -84,7 +103,7 @@ function animate() {
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
     if (!player.interacting) {
-      movementManager(canvas, keys, lastKey, player, boundaries, []);
+      movementManager(canvas, keys, lastKey, player, boundaries, characters);
       canv_game.style.display = "inline";
       comic_page.style.display = "none";
 
@@ -236,10 +255,215 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
+// Mobile touch controls
+function simulateKeyPress(key) {
+  switch (key) {
+    case " ":
+      keys.space.pressed = true;
+      lastKey = " ";
+      break;
+    case "w":
+      keys.w.pressed = true;
+      lastKey = "w";
+      break;
+    case "a":
+      keys.a.pressed = true;
+      lastKey = "a";
+      break;
+    case "s":
+      keys.s.pressed = true;
+      lastKey = "s";
+      break;
+    case "d":
+      keys.d.pressed = true;
+      lastKey = "d";
+      break;
+  }
+}
 
-// game engine
-/////////
-// 1. chapter  Type === COMIC or GAME or IDLE  or FIGHT 
-// 1. COMIC - col botton azione si va avanti per il dialogo. si vede una immagine di sfondo. ogni dialogo puo avere una immagine di sfondo.
-// 1. GAME - oggetti con cui interagire e compare un div col dialogo. Una maniera di ottenere uno status in piu dopo aver interagito con certi oggetti (prendi bottiglia, porta bottiglia).Stabilire un ordine di cose da fare. 
-// Le interazioni successicve con gli oggetti si possono basare su questo status per cambiare tipo di iterazione.
+function simulateKeyRelease(key) {
+  switch (key) {
+    case "w":
+      keys.w.pressed = false;
+      break;
+    case "a":
+      keys.a.pressed = false;
+      break;
+    case "s":
+      keys.s.pressed = false;
+      break;
+    case "d":
+      keys.d.pressed = false;
+      break;
+    case " ":
+      keys.space.pressed = false;
+      break;
+  }
+}
+
+// Function to scroll text content on mobile - ONLY for comic scenes
+function scrollTextContent(direction) {
+  console.log('scrollTextContent called with direction:', direction);
+  const isMobile = window.innerWidth <= 768;
+  console.log('isMobile:', isMobile, 'window width:', window.innerWidth);
+
+  if (!isMobile) return false;
+
+  // Only handle scrolling in comic scenes (image on top, text on bottom)
+  const comicDiv = doc.getElementById("comic_div");
+  console.log('comicDiv display:', comicDiv ? comicDiv.style.display : 'comicDiv not found');
+
+  // Check if we're in a comic scene (image + text layout)
+  if (comicDiv && comicDiv.style.display !== "none") {
+    const comicText = doc.getElementById("dialogue_box_comic_text");
+    console.log('comicText found:', !!comicText);
+
+    if (comicText) {
+      console.log('scrollTop:', comicText.scrollTop, 'scrollHeight:', comicText.scrollHeight, 'clientHeight:', comicText.clientHeight);
+
+      if (direction === 'down') {
+        // Check if there's more content to scroll down
+        if (comicText.scrollTop < comicText.scrollHeight - comicText.clientHeight) {
+          comicText.scrollTop += 40; // Scroll down
+          console.log('Scrolled down, new scrollTop:', comicText.scrollTop);
+          return true;
+        } else {
+          console.log('Cannot scroll down - at bottom');
+        }
+      } else if (direction === 'up') {
+        // Check if we can scroll up
+        if (comicText.scrollTop > 0) {
+          comicText.scrollTop -= 40; // Scroll up
+          console.log('Scrolled up, new scrollTop:', comicText.scrollTop);
+          return true;
+        } else {
+          console.log('Cannot scroll up - at top');
+        }
+      }
+    }
+  }
+
+  console.log('No scrolling handled - returning false');
+  // For game scenes (character movement), don't handle scrolling - let normal controls work
+  return false;
+}
+
+// Prevent double-tap zoom
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+  const now = (new Date()).getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+
+// Prevent pinch zoom
+document.addEventListener('gesturestart', function (e) {
+  e.preventDefault();
+});
+
+document.addEventListener('gesturechange', function (e) {
+  e.preventDefault();
+});
+
+document.addEventListener('gestureend', function (e) {
+  e.preventDefault();
+});
+
+// Add touch event listeners for mobile controls
+document.addEventListener('DOMContentLoaded', () => {
+  const mobileButtons = document.querySelectorAll('.dpad-btn, .action-btn');
+
+  mobileButtons.forEach(button => {
+    const key = button.getAttribute('data-key');
+    let touchStartTime = 0;
+
+    // Handle touch start
+    button.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      touchStartTime = Date.now();
+
+      // Safari debugging
+      console.log('Touch start on key:', key, 'Safari:', /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent));
+
+      // Check if we should handle text scrolling instead of normal key input
+      console.log('Touch start on key:', key);
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && (key === 's' || key === 'w')) {
+        console.log('Attempting text scroll for key:', key);
+        const direction = key === 's' ? 'down' : 'up';
+        const scrollHandled = scrollTextContent(direction);
+        console.log('Scroll handled:', scrollHandled);
+        if (scrollHandled) {
+          console.log('Scroll handled - NOT simulating key press');
+          return; // Don't simulate key press if we handled scrolling
+        }
+      }
+
+      console.log('Simulating key press for:', key);
+      // Always allow action button (spacebar) to work for scene progression
+      simulateKeyPress(key);
+    }, { passive: false });
+
+    // Handle touch end - ensure minimum duration for antiBouncer
+    button.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Ensure minimum touch duration for action button to work with antiBouncer
+      const touchDuration = Date.now() - touchStartTime;
+      if (key === ' ' && touchDuration < 50) {
+        // Wait a bit longer for action button to ensure antiBouncer logic works
+        setTimeout(() => {
+          simulateKeyRelease(key);
+        }, 50 - touchDuration);
+      } else {
+        simulateKeyRelease(key);
+      }
+    }, { passive: false });
+
+    // Safari fallback - use click event as backup
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log('Click fallback triggered for key:', key);
+
+      // For Safari, sometimes touch events don't work properly, so use click as backup
+      if (/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) {
+        simulateKeyPress(key);
+        setTimeout(() => simulateKeyRelease(key), 100);
+      }
+    });
+
+    // Handle mouse events for desktop testing
+    button.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+
+      // Check if we should handle text scrolling instead of normal key input
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && (key === 's' || key === 'w')) {
+        const direction = key === 's' ? 'down' : 'up';
+        const scrollHandled = scrollTextContent(direction);
+        if (scrollHandled) {
+          return; // Don't simulate key press if we handled scrolling
+        }
+      }
+
+      // Always allow action button (spacebar) to work for scene progression
+      simulateKeyPress(key);
+    });
+
+    button.addEventListener('mouseup', (e) => {
+      e.preventDefault();
+      simulateKeyRelease(key);
+    });
+
+    // Prevent context menu on long press
+    button.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+    });
+  });
+});
