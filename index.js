@@ -11,64 +11,69 @@ import {
 } from "./js/utils.js";
 import { plot } from "./data/plot.js";
 
-// Set base canvas size
-canvas.width = 960;
-canvas.height = 640;
+// Set canvas size based on device
+function setupCanvas() {
+  const isMobile = window.innerWidth <= 768;
 
-// Responsive canvas and comic scaling function
-function resizeCanvas() {
-  const gameAspectRatio = 960 / 640; // 1.5
-  const windowWidth = window.innerWidth;
-  const windowHeight = window.innerHeight;
-  const windowAspectRatio = windowWidth / windowHeight;
-
-  let newWidth, newHeight;
-
-  if (windowAspectRatio > gameAspectRatio) {
-    // Window is wider than game ratio - fit to height
-    newHeight = windowHeight;
-    newWidth = newHeight * gameAspectRatio;
+  if (isMobile) {
+    // Mobile: Use full screen dimensions as canvas resolution
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
   } else {
-    // Window is taller than game ratio - fit to width
-    newWidth = windowWidth;
-    newHeight = newWidth / gameAspectRatio;
+    // Desktop: Use fixed size
+    canvas.width = 960;
+    canvas.height = 640;
+    canvas.style.width = '960px';
+    canvas.style.height = '640px';
   }
 
-  const leftPos = (windowWidth - newWidth) / 2;
-  const topPos = (windowHeight - newHeight) / 2;
-
-  // Apply scaling to canvas via CSS while maintaining internal resolution
-  canvas.style.width = newWidth + 'px';
-  canvas.style.height = newHeight + 'px';
   canvas.style.position = 'absolute';
-  canvas.style.left = leftPos + 'px';
-  canvas.style.top = topPos + 'px';
+  canvas.style.left = '0px';
+  canvas.style.top = '0px';
+}
 
-  // Apply same scaling to comic div
+// Function to resize canvas for mobile
+function resizeCanvas() {
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Update canvas to current screen size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
+
+  // Update comic div for mobile
   const comicDiv = document.getElementById('comic_div');
-  if (comicDiv) {
-    comicDiv.style.width = newWidth + 'px';
-    comicDiv.style.height = newHeight + 'px';
+  if (comicDiv && isMobile) {
+    comicDiv.style.width = window.innerWidth + 'px';
+    comicDiv.style.height = window.innerHeight + 'px';
     comicDiv.style.position = 'absolute';
-    comicDiv.style.left = leftPos + 'px';
-    comicDiv.style.top = topPos + 'px';
+    comicDiv.style.left = '0px';
+    comicDiv.style.top = '0px';
     comicDiv.style.overflow = 'hidden';
   }
 
-  // Apply scaling to comic background
+  // Update comic background for mobile (keep original aspect ratio but cover screen)
   const comicBackground = document.getElementById('comic_background');
-  if (comicBackground) {
-    comicBackground.style.width = newWidth + 'px';
-    comicBackground.style.height = newHeight + 'px';
+  if (comicBackground && isMobile) {
+    comicBackground.style.width = '100%';
+    comicBackground.style.height = '100%';
     comicBackground.style.objectFit = 'cover';
   }
 }
 
-// Initialize responsive sizing
-resizeCanvas();
+// Initialize canvas
+setupCanvas();
 window.addEventListener('resize', resizeCanvas);
 window.addEventListener('orientationchange', () => {
-  setTimeout(resizeCanvas, 100); // Small delay for orientation change
+  setTimeout(() => {
+    setupCanvas();
+    resizeCanvas();
+  }, 100);
 });
 
 let lastKey = "";

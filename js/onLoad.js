@@ -40,6 +40,7 @@ export const loadRenderables = (chapter) => {
   const playerStartY = canvas.height / 2 - 16; // Center minus half player height
 
   // Offset background so player appears at the correct world position
+  // Background images keep their original size - no scaling
   const originalPlayerX = chapter.player.position.x;
   const originalPlayerY = chapter.player.position.y;
   const backgroundOffsetX = playerStartX - originalPlayerX;

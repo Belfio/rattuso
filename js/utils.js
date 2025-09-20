@@ -53,15 +53,14 @@ export const movementManager = (
   let moving = true;
   player.animate = false;
 
-  // Camera system configuration for mobile-friendly experience
+  // Camera system configuration - works with full-screen mobile canvas
   const VIEWPORT_CENTER_X = canvas.width / 2;
   const VIEWPORT_CENTER_Y = canvas.height / 2;
-  const CAMERA_DEADZONE = 100; // Player can move this much before camera follows
 
-  // Get background to determine map boundaries
+  // Get background to determine map boundaries (background keeps original size)
   const background = renderables.find(r => r.constructor.name === 'Sprite' && r.image && !r.sprites);
-  const mapWidth = background ? background.image.width : canvas.width * 2;
-  const mapHeight = background ? background.image.height : canvas.height * 2;
+  const mapWidth = background ? background.image.naturalWidth || background.image.width : 960;
+  const mapHeight = background ? background.image.naturalHeight || background.image.height : 640;
 
   if (keys.w.pressed && lastKey === "w") {
     player.animate = true;

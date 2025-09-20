@@ -153,11 +153,22 @@
           -webkit-overflow-scrolling: touch;
         }
 
-        /* Canvas sizing is now handled by JavaScript for proper aspect ratio */
+        /* Canvas and comic containers fill full mobile screen */
+        canvas {
+          width: 100vw !important;
+          height: 100vh !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
 
-        /* Comic div sizing is now handled by JavaScript for proper aspect ratio */
-
-        /* Comic background sizing is now handled by JavaScript */
+        #comic_div {
+          width: 100vw !important;
+          height: 100vh !important;
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+        }
 
         /* Mobile text adjustments */
         #dialogueBox {
