@@ -3,7 +3,7 @@ import { canvas, doc } from './classes.js';
 import { keys, IDLE, COMIC, GAME } from './js/constants.js';
 import {
   movementManager,
-  checkForCharacterCollision,
+  checkForPlayerCollision,
   interactionConvo,
   selectNextOption,
   nextAnswerIndex,
@@ -116,6 +116,10 @@ function animate() {
   if (chapterType === IDLE) {
     chapterEnd = false;
     currentChapter = plot.story[i];
+    if(!currentChapter) {
+      console.log('currentChapter is not set');
+      return;
+    }
     chapterType = currentChapter.type;
     i++;
     story_index = 0;
@@ -188,7 +192,7 @@ function animate() {
     const player = renderables.player;
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
-    const objects = renderables.objects;
+    const objects = currentChapter.objects;
 
     if (!player.interacting) {
       movementManager(
@@ -205,15 +209,18 @@ function animate() {
       comic_page.style.display = 'none';
 
       // interagisci
-      if (
-        keys.space.pressed &&
-        lastKey === ' ' &&
-        antiBouncer > ANTI_BOUNCER_LIMIT
-      ) {
-        console.log('checkForCharacterCollision');
+      const keyPressed = checkKeysPressed(
+        keys,
+        lastKey,
+        antiBouncer,
+        ANTI_BOUNCER_LIMIT
+      );
+      if (keyPressed === 'action') {
+        console.log('checkForPlayerCollision');
         antiBouncer = 0;
-        checkForCharacterCollision({
+        checkForPlayerCollision({
           characters,
+          objects,
           player,
           charState,
           interactionEnd,

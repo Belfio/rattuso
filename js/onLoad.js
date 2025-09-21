@@ -1,6 +1,7 @@
 import { Sprite } from '../classes.js';
 import { Boundary } from '../classes.js';
 import { collisions } from '../data/collisions.js';
+
 // import { objects2 } from "../data/objects2.js";
 const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
   const collisionsMap = [];
@@ -33,6 +34,7 @@ const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
 
   return boundaries;
 };
+
 
 export const loadRenderables = chapter => {
   const characters = [];
@@ -92,6 +94,7 @@ export const loadRenderables = chapter => {
     backgroundOffsetX,
     backgroundOffsetY
   );
+
 
   const foregroundImage = new Image();
   // foregroundImage.src = "./img/foregroundObjects.png";
@@ -199,6 +202,7 @@ export const loadRenderables = chapter => {
       })
     );
   });
+
   return {
     toRender: [
       background,

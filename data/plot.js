@@ -103,7 +103,9 @@ export const plot = {
         {
           type: 'object',
           name: 'armadio',
-          position: { x: 260, y: 320 },
+          position: { x: 157, y: 81},
+          width: 30,
+          height: 74,
           interactions: {
             default: {
               type: 'discussion',
@@ -113,6 +115,52 @@ export const plot = {
                   b: [
                     {
                       option: 'Quando stirerò un camicia...',
+                      next: 'END',
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+                {
+          type: 'object',
+          name: 'frigo',
+          position: { x: 202, y: 81},
+          width: 35,
+          height: 74,
+          interactions: {
+            default: {
+              type: 'discussion',
+              discussion: [
+                {
+                  a: 'Frigo',
+                  b: [
+                    {
+                      option: 'Mai un cazzo qua dentro...',
+                      next: 'END',
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+                {
+          type: 'object',
+          name: 'scrivania',
+          position: { x: 202, y: 176},
+          width: 27,
+          height: 75,
+          interactions: {
+            default: {
+              type: 'discussion',
+              discussion: [
+                {
+                  a: 'Srivania',
+                  b: [
+                    {
+                      option: 'Solo spam',
                       next: 'END',
                     },
                   ],
