@@ -141,12 +141,22 @@ export const movementManager = (
       player,
       characterOffset: { x: SPEED, y: 0 },
     });
+    // If interaction started, stop movement animation
+    if (player.interacting) {
+      player.animate = false;
+      return false;
+    }
   } else if (direction === 'right') {
     checkForCharacterCollision({
       characters,
       player,
       characterOffset: { x: -SPEED, y: 0 },
     });
+    // If interaction started, stop movement animation
+    if (player.interacting) {
+      player.animate = false;
+      return false;
+    }
   }
 
   // Directional offsets for boundary collision pre-check
