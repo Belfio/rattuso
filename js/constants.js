@@ -16,6 +16,6 @@ export const keys = {
   },
 };
 
-export const IDLE = "idle";
-export const COMIC = "comic";
-export const GAME = "game";
+export const IDLE = 'idle';
+export const COMIC = 'comic';
+export const GAME = 'game';

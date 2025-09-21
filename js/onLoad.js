@@ -1,6 +1,6 @@
-import { Sprite } from "../classes.js";
-import { Boundary } from "../classes.js";
-import { collisions } from "../data/collisions.js";
+import { Sprite } from '../classes.js';
+import { Boundary } from '../classes.js';
+import { collisions } from '../data/collisions.js';
 // import { objects2 } from "../data/objects2.js";
 const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
   const collisionsMap = [];
@@ -34,11 +34,11 @@ const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
   return boundaries;
 };
 
-export const loadRenderables = (chapter) => {
+export const loadRenderables = chapter => {
   const characters = [];
 
   // For camera system, position player and background correctly
-  const canvas = document.querySelector("canvas");
+  const canvas = document.querySelector('canvas');
   const viewportCenterX = canvas.width / 2 - 16; // Center minus half player width
   const viewportCenterY = canvas.height / 2 - 16; // Center minus half player height
 
@@ -51,8 +51,8 @@ export const loadRenderables = (chapter) => {
   const originalPlayerY = chapter.player.position.y;
 
   // Calculate ideal background offset to center player
-  let idealBackgroundOffsetX = viewportCenterX - originalPlayerX;
-  let idealBackgroundOffsetY = viewportCenterY - originalPlayerY;
+  const idealBackgroundOffsetX = viewportCenterX - originalPlayerX;
+  const idealBackgroundOffsetY = viewportCenterY - originalPlayerY;
 
   // Clamp background offset to prevent grey canvas exposure
   function clampBackgroundOffset(offsetX, offsetY) {
@@ -80,26 +80,33 @@ export const loadRenderables = (chapter) => {
     return { x: clampedX, y: clampedY };
   }
 
-  const clampedOffset = clampBackgroundOffset(idealBackgroundOffsetX, idealBackgroundOffsetY);
+  const clampedOffset = clampBackgroundOffset(
+    idealBackgroundOffsetX,
+    idealBackgroundOffsetY
+  );
   const backgroundOffsetX = clampedOffset.x;
   const backgroundOffsetY = clampedOffset.y;
 
-  const boundaries = loadCollisions(collisions[chapter.collisions_name], backgroundOffsetX, backgroundOffsetY);
+  const boundaries = loadCollisions(
+    collisions[chapter.collisions_name],
+    backgroundOffsetX,
+    backgroundOffsetY
+  );
 
   const foregroundImage = new Image();
   // foregroundImage.src = "./img/foregroundObjects.png";
 
   const playerDownImage = new Image();
-  playerDownImage.src = "../assets/playerDown.png";
+  playerDownImage.src = '../assets/playerDown.png';
 
   const playerUpImage = new Image();
-  playerUpImage.src = "../assets/playerUp.png";
+  playerUpImage.src = '../assets/playerUp.png';
 
   const playerLeftImage = new Image();
-  playerLeftImage.src = "../assets/playerLeft.png";
+  playerLeftImage.src = '../assets/playerLeft.png';
 
   const playerRightImage = new Image();
-  playerRightImage.src = "../assets/playerRight.png";
+  playerRightImage.src = '../assets/playerRight.png';
 
   // Calculate final player screen position
   // If we can center the player (background wasn't clamped), player goes to center
@@ -154,18 +161,18 @@ export const loadRenderables = (chapter) => {
   //   image: foregroundImage,
   // });
 
-  chapter.characters.forEach((character) => {
+  chapter.characters.forEach(character => {
     const characterDownImage = new Image();
-    characterDownImage.src = "../assets/playerDown.png";
+    characterDownImage.src = '../assets/playerDown.png';
 
     const characterUpImage = new Image();
-    characterUpImage.src = "../assets/playerUp.png";
+    characterUpImage.src = '../assets/playerUp.png';
 
     const characterLeftImage = new Image();
-    characterLeftImage.src = "../assets/playerLeft.png";
+    characterLeftImage.src = '../assets/playerLeft.png';
 
     const characterRightImage = new Image();
-    characterRightImage.src = "../assets/playerRight.png";
+    characterRightImage.src = '../assets/playerRight.png';
     const characterImages = {
       up: characterUpImage,
       down: characterDownImage,

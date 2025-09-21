@@ -1,6 +1,6 @@
-export const canvas = document.querySelector("canvas");
+export const canvas = document.querySelector('canvas');
 export const doc = document;
-export const c = canvas.getContext("2d");
+export const c = canvas.getContext('2d');
 
 export class Sprite {
   constructor({
@@ -81,15 +81,20 @@ export class Sprite {
 
     c.restore();
 
-    if (!this.animate) return;
+    if (!this.animate) {
+      return;
+    }
 
     if (this.frames.max > 1) {
       this.frames.elapsed++;
     }
 
     if (this.frames.elapsed % this.frames.hold === 0) {
-      if (this.frames.val < this.frames.max - 1) this.frames.val++;
-      else this.frames.val = 0;
+      if (this.frames.val < this.frames.max - 1) {
+        this.frames.val++;
+      } else {
+        this.frames.val = 0;
+      }
     }
   }
 }
@@ -123,7 +128,7 @@ class Monster extends Sprite {
   }
 
   faint() {
-    document.querySelector("#dialogueBox").innerHTML = this.name + " fainted!";
+    document.querySelector('#dialogueBox').innerHTML = this.name + ' fainted!';
     gsap.to(this.position, {
       y: this.position.y + 20,
     });
@@ -135,23 +140,27 @@ class Monster extends Sprite {
   }
 
   attack({ attack, recipient, renderedSprites }) {
-    document.querySelector("#dialogueBox").style.display = "block";
-    document.querySelector("#dialogueBox").innerHTML =
-      this.name + " used " + attack.name;
+    document.querySelector('#dialogueBox').style.display = 'block';
+    document.querySelector('#dialogueBox').innerHTML =
+      this.name + ' used ' + attack.name;
 
-    let healthBar = "#enemyHealthBar";
-    if (this.isEnemy) healthBar = "#playerHealthBar";
+    let healthBar = '#enemyHealthBar';
+    if (this.isEnemy) {
+      healthBar = '#playerHealthBar';
+    }
 
     let rotation = 1;
-    if (this.isEnemy) rotation = -2.2;
+    if (this.isEnemy) {
+      rotation = -2.2;
+    }
 
     recipient.health -= attack.damage;
 
     switch (attack.name) {
-      case "Fireball":
+      case 'Fireball':
         audio.initFireball.play();
         const fireballImage = new Image();
-        fireballImage.src = "./img/fireball.png";
+        fireballImage.src = './img/fireball.png';
         const fireball = new Sprite({
           position: {
             x: this.position.x,
@@ -174,7 +183,7 @@ class Monster extends Sprite {
             // Enemy actually gets hit
             audio.fireballHit.play();
             gsap.to(healthBar, {
-              width: recipient.health + "%",
+              width: recipient.health + '%',
             });
 
             gsap.to(recipient.position, {
@@ -195,11 +204,13 @@ class Monster extends Sprite {
         });
 
         break;
-      case "Tackle":
+      case 'Tackle':
         const tl = gsap.timeline();
 
         let movementDistance = 20;
-        if (this.isEnemy) movementDistance = -20;
+        if (this.isEnemy) {
+          movementDistance = -20;
+        }
 
         tl.to(this.position, {
           x: this.position.x - movementDistance,
@@ -211,7 +222,7 @@ class Monster extends Sprite {
               // Enemy actually gets hit
               audio.tackleHit.play();
               gsap.to(healthBar, {
-                width: recipient.health + "%",
+                width: recipient.health + '%',
               });
 
               gsap.to(recipient.position, {
@@ -247,7 +258,7 @@ export class Boundary {
   }
 
   draw() {
-    c.fillStyle = "rgba(255, 0, 0, 0)";
+    c.fillStyle = 'rgba(255, 0, 0, 0)';
     c.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }
@@ -262,7 +273,7 @@ class Character extends Sprite {
     animate = false,
     rotation = 0,
     scale = 1,
-    dialogue = [""],
+    dialogue = [''],
   }) {
     super({
       position,

@@ -1,7 +1,7 @@
-import { IDLE, COMIC, GAME } from "../js/constants.js";
+import { IDLE, COMIC, GAME } from '../js/constants.js';
 export const plot = {
-  title: "Rattuso",
-  version: "0.1",
+  title: 'Rattuso',
+  version: '0.1',
   story: [
     // Chapter 1: Opening comic scene - COMMENTED OUT FOR DEBUGGING
     // Uncomment this section to enable the intro comic scene
@@ -28,95 +28,100 @@ export const plot = {
     // Interactive game scene where player can move around and interact with NPCs.
     // Uses the camera/viewport system for mobile-friendly movement.
     {
-      title: "", // No title for game scenes
+      title: '', // No title for game scenes
       type: GAME, // Interactive gameplay scene
-      background: "casa.png", // Background map image
-      collisions_name: "home", // References collision data for boundaries
+      background: 'casa.png', // Background map image
+      collisions_name: 'home', // References collision data for boundaries
       player: {
         position: { x: 40, y: 180 }, // Starting position in world coordinates
         interactions: [], // Player-specific interactions (currently empty)
-        name: "Rattuso", // Player character name
+        name: 'Rattuso', // Player character name
       },
-      characters: [ // NPCs in this scene
+      characters: [
+        // NPCs in this scene
         {
-          type: "friend", // Character type/relationship
-          name: "Nieddu", // Character name
-          url: "", // Character sprite URL (currently empty)
-          direction: "up", // Which direction the character is facing initially
+          type: 'friend', // Character type/relationship
+          name: 'Nieddu', // Character name
+          url: '', // Character sprite URL (currently empty)
+          direction: 'up', // Which direction the character is facing initially
           position: { x: 260, y: 320 }, // Character position in world coordinates
           interactions: {
-            default:
-              { // Defines how player can interact with this character
-              type: "discussion", // Interaction type - branching dialogue
-              discussion: [ // Array of dialogue nodes
+            default: {
+              // Defines how player can interact with this character
+              type: 'discussion', // Interaction type - branching dialogue
+              discussion: [
+                // Array of dialogue nodes
                 {
-                  a: "- Ispettore, Nieddu sono!",
+                  a: '- Ispettore, Nieddu sono!',
                   b: [
                     {
-                      option: "- Non è giornata Nieddu, passa più tardi...",
+                      option: '- Non è giornata Nieddu, passa più tardi...',
                       next: 1,
                     },
                     {
-                      option: "- Dimmi che mi hai portato un caffè Nieddu",
-                      state: "caffe",
-                      next: "CHAPTER_END",
+                      option: '- Dimmi che mi hai portato un caffè Nieddu',
+                      state: 'caffe',
+                      next: 'CHAPTER_END',
                     },
                   ],
                 },
                 {
                   a: "Abbiamo un'emergenza Ispettore!", // Character's response
-                  b: [{ option: "-Che palle...", next: "END" }], // Single response option
+                  b: [{ option: '-Che palle...', next: 'END' }], // Single response option
                 },
               ],
             },
-            caffe:
-              { // Defines how player can interact with this character
-              type: "discussion", // Interaction type - branching dialogue
-              discussion: [ // Array of dialogue nodes
+            caffe: {
+              // Defines how player can interact with this character
+              type: 'discussion', // Interaction type - branching dialogue
+              discussion: [
+                // Array of dialogue nodes
                 {
-                  a: "- Ispettore, Nieddu sono!",
+                  a: '- Ispettore, Nieddu sono!',
                   b: [
                     {
-                      option: "- Non è giornata Nieddu, passa più tardi...",
+                      option: '- Non è giornata Nieddu, passa più tardi...',
                       next: 1,
                     },
                     {
-                      option: "- Dimmi che mi hai portato un caffè Nieddu",
-                      state: "caffe",
-                      next: "END",
+                      option: '- Dimmi che mi hai portato un caffè Nieddu',
+                      state: 'caffe',
+                      next: 'END',
                     },
                   ],
                 },
                 {
                   a: "Abbiamo un'emergenza Ispettore!", // Character's response
-                  b: [{ option: "-Che palle...", next: "CHAPTER_END" }], // Single response option
+                  b: [{ option: '-Che palle...', next: 'CHAPTER_END' }], // Single response option
                 },
               ],
-            }
+            },
           },
         },
       ],
       objects: [
         {
-          type: "object",
-          name: "armadio",
+          type: 'object',
+          name: 'armadio',
           position: { x: 260, y: 320 },
-          interactions:   {
-            default:
-              {
-                type: "discussion",
-                discussion: [
-                  {
-                    a: "Armadio",
-                    b: [
-                      {
-                        option: "Quando stirerò un camicia...",
-                        next: "END",
-                      },
-                    ]}]}}
+          interactions: {
+            default: {
+              type: 'discussion',
+              discussion: [
+                {
+                  a: 'Armadio',
+                  b: [
+                    {
+                      option: 'Quando stirerò un camicia...',
+                      next: 'END',
+                    },
+                  ],
+                },
+              ],
+            },
+          },
         },
       ],
     },
-
   ],
 };

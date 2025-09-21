@@ -16,7 +16,9 @@ export const checkForCharacterCollision = ({
   characterOffset = { x: 0, y: 0 },
   interactionEnd = false,
 }) => {
-  if (interactionEnd) return;
+  if (interactionEnd) {
+    return;
+  }
   // console.log(player);
   // console.log(characters);
   player.interactionAsset = null;
@@ -52,7 +54,7 @@ export const movementManager = (
   characters,
   renderables
 ) => {
-  let moving = true;
+  const moving = true;
   player.animate = false;
 
   // Camera system configuration - works with full-screen mobile canvas
@@ -60,11 +62,17 @@ export const movementManager = (
   const VIEWPORT_CENTER_Y = canvas.height / 2;
 
   // Get background to determine map boundaries (background keeps original size)
-  const background = renderables.find(r => r.constructor.name === 'Sprite' && r.image && !r.sprites);
-  const mapWidth = background ? background.image.naturalWidth || background.image.width : 960;
-  const mapHeight = background ? background.image.naturalHeight || background.image.height : 640;
+  const background = renderables.find(
+    r => r.constructor.name === 'Sprite' && r.image && !r.sprites
+  );
+  const mapWidth = background
+    ? background.image.naturalWidth || background.image.width
+    : 960;
+  const mapHeight = background
+    ? background.image.naturalHeight || background.image.height
+    : 640;
 
-  if (keys.w.pressed && lastKey === "w") {
+  if (keys.w.pressed && lastKey === 'w') {
     player.animate = true;
     player.image = player.sprites.up;
 
@@ -93,7 +101,8 @@ export const movementManager = (
       const backgroundY = background ? background.position.y : 0;
 
       // Check if player is centered (within 5px tolerance)
-      const isPlayerCentered = Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
+      const isPlayerCentered =
+        Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
 
       if (!isPlayerCentered && player.position.y > VIEWPORT_CENTER_Y) {
         // Phase 1: Move player toward center from below, keep map still
@@ -118,7 +127,7 @@ export const movementManager = (
         }
       }
     }
-  } else if (keys.a.pressed && lastKey === "a") {
+  } else if (keys.a.pressed && lastKey === 'a') {
     player.animate = true;
     player.image = player.sprites.left;
 
@@ -152,7 +161,8 @@ export const movementManager = (
       const backgroundX = background ? background.position.x : 0;
 
       // Check if player is centered (within 5px tolerance)
-      const isPlayerCentered = Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
+      const isPlayerCentered =
+        Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
 
       if (!isPlayerCentered && player.position.x > VIEWPORT_CENTER_X) {
         // Phase 1: Move player toward center from the right, keep map still
@@ -177,7 +187,7 @@ export const movementManager = (
         }
       }
     }
-  } else if (keys.s.pressed && lastKey === "s") {
+  } else if (keys.s.pressed && lastKey === 's') {
     player.animate = true;
     player.image = player.sprites.down;
 
@@ -205,7 +215,8 @@ export const movementManager = (
       const backgroundY = background ? background.position.y : 0;
 
       // Check if player is centered (within 5px tolerance)
-      const isPlayerCentered = Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
+      const isPlayerCentered =
+        Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
 
       if (!isPlayerCentered && player.position.y < VIEWPORT_CENTER_Y) {
         // Phase 1: Move player toward center from above, keep map still
@@ -230,7 +241,7 @@ export const movementManager = (
         }
       }
     }
-  } else if (keys.d.pressed && lastKey === "d") {
+  } else if (keys.d.pressed && lastKey === 'd') {
     player.animate = true;
     player.image = player.sprites.right;
 
@@ -264,7 +275,8 @@ export const movementManager = (
       const backgroundX = background ? background.position.x : 0;
 
       // Check if player is centered (within 5px tolerance)
-      const isPlayerCentered = Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
+      const isPlayerCentered =
+        Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
 
       if (!isPlayerCentered && player.position.x < VIEWPORT_CENTER_X) {
         // Phase 1: Move player toward center from the left, keep map still
@@ -294,13 +306,13 @@ export const movementManager = (
 };
 
 export const interactionConvo = (player, charState) => {
-  let interactionEnd = false;
-  let htmlTextQ = "";
-  let htmlTextA = "";
+  const interactionEnd = false;
+  let htmlTextQ = '';
+  let htmlTextA = '';
   const index = player.interactionAsset.index;
   const answerTemp = player.interactionAsset.answerTemp;
   const interaction = player.interactionAsset.character.interactions[charState];
-  if (interaction.type === "discussion") {
+  if (interaction.type === 'discussion') {
     htmlTextQ = `${interaction.discussion[index].a} `;
 
     interaction.discussion[index].b.forEach(
@@ -308,7 +320,7 @@ export const interactionConvo = (player, charState) => {
         (htmlTextA =
           htmlTextA +
           `<div id="dialogueBoxTextResponse" class="answerOption${
-            answerTemp === i ? " selectedAnswer" : ""
+            answerTemp === i ? ' selectedAnswer' : ''
           }">
         ${answer.option}</div>`)
     );
@@ -320,18 +332,18 @@ export const interactionConvo = (player, charState) => {
 };
 
 export const selectNextOption = (player, charState) => {
-  let htmlTextA = "";
+  let htmlTextA = '';
   const index = player.interactionAsset.index;
   const answerTemp = player.interactionAsset.answerTemp;
   const interaction = player.interactionAsset.character.interactions[charState];
-  
-  if (interaction.type === "discussion") {
+
+  if (interaction.type === 'discussion') {
     interaction.discussion[index].b.forEach(
       (answer, i) =>
         (htmlTextA =
           htmlTextA +
           `<div id="dialogueBoxTextResponse" class="answerOption${
-            answerTemp === i ? " selectedAnswer" : ""
+            answerTemp === i ? ' selectedAnswer' : ''
           }">
         ${answer.option}</div>`)
     );
@@ -342,32 +354,38 @@ export const selectNextOption = (player, charState) => {
 };
 
 export const nextAnswerIndex = (player, lastKey, charState) => {
-  try{
-  const index = player.interactionAsset.index;
-  const answerTemp = player.interactionAsset.answerTemp;
-  const interaction = player.interactionAsset.character.interactions[charState];
-  console.log(interaction);
-  console.log(charState);
-  const answersTotNumber = interaction.discussion[index].b.length;
-  let newIndex = answerTemp;
+  try {
+    const index = player.interactionAsset.index;
+    const answerTemp = player.interactionAsset.answerTemp;
+    const interaction =
+      player.interactionAsset.character.interactions[charState];
+    console.log(interaction);
+    console.log(charState);
+    const answersTotNumber = interaction.discussion[index].b.length;
+    let newIndex = answerTemp;
 
-  switch (lastKey) {
-    case "s":
-      if (newIndex === answersTotNumber - 1) newIndex = 0;
-      else newIndex++;
-      break;
-    case "w":
-      if (newIndex === 0) newIndex = answersTotNumber - 1;
-      else newIndex--;
-      break;
+    switch (lastKey) {
+      case 's':
+        if (newIndex === answersTotNumber - 1) {
+          newIndex = 0;
+        } else {
+          newIndex++;
+        }
+        break;
+      case 'w':
+        if (newIndex === 0) {
+          newIndex = answersTotNumber - 1;
+        } else {
+          newIndex--;
+        }
+        break;
 
-    default:
-      break;
-  }
-  return newIndex;
+      default:
+        break;
+    }
+    return newIndex;
   } catch (error) {
-
-    console.log("Probably something wrong with the plot");
+    console.log('Probably something wrong with the plot');
     const index = player.interactionAsset.index;
     const answerTemp = player.interactionAsset.answerTemp;
     console.log(index);
@@ -390,36 +408,39 @@ export const getNextState = (player, charState) => {
   const answerTemp = player.interactionAsset.answerTemp;
   const interaction = player.interactionAsset.character.interactions[charState];
 
-  return interaction.discussion[index].b[answerTemp].state || "default";
+  return interaction.discussion[index].b[answerTemp].state || 'default';
 };
 
-
-export const checkKeysPressed = (keys, lastKey, antiBouncer, antiBouncerLimit) => {
-  if (keys.w.pressed && lastKey === "w" && antiBouncer > antiBouncerLimit) {
-    return "up";
+export const checkKeysPressed = (
+  keys,
+  lastKey,
+  antiBouncer,
+  antiBouncerLimit
+) => {
+  if (keys.w.pressed && lastKey === 'w' && antiBouncer > antiBouncerLimit) {
+    return 'up';
   }
-  if (keys.s.pressed && lastKey === "s" && antiBouncer > antiBouncerLimit) {
-    return "down";
+  if (keys.s.pressed && lastKey === 's' && antiBouncer > antiBouncerLimit) {
+    return 'down';
   }
-  if (keys.space.pressed && lastKey === " " && antiBouncer > antiBouncerLimit) {
-    return "action";
+  if (keys.space.pressed && lastKey === ' ' && antiBouncer > antiBouncerLimit) {
+    return 'action';
   }
-  if (keys.a.pressed && lastKey === "a" && antiBouncer > antiBouncerLimit) {
-    return "left";
+  if (keys.a.pressed && lastKey === 'a' && antiBouncer > antiBouncerLimit) {
+    return 'left';
   }
-  if (keys.d.pressed && lastKey === "d" && antiBouncer > antiBouncerLimit) {
-    return "right";
+  if (keys.d.pressed && lastKey === 'd' && antiBouncer > antiBouncerLimit) {
+    return 'right';
   }
   return null;
 };
 
 let oldLog = null;
 export function log(message, doc) {
-  const logBox = doc.getElementById("logs");
-  if(message === oldLog) return;
+  const logBox = doc.getElementById('logs');
+  if (message === oldLog) {
+    return;
+  }
   oldLog = message;
-  logBox.innerHTML = message 
-
+  logBox.innerHTML = message;
 }
-
-
