@@ -12,7 +12,7 @@ export class Sprite {
     animate = false,
     rotation = 0,
     scale = 1,
-    interaction,
+    interactions,
     name,
   }) {
     this.position = position;
@@ -32,7 +32,7 @@ export class Sprite {
     this.scale = scale;
     this.interactionAsset = {};
     this.interacting = false;
-    this.interaction = interaction;
+    this.interactions = interactions;
     this.name = name;
   }
 

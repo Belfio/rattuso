@@ -8,6 +8,9 @@ import {
   selectNextOption,
   nextAnswerIndex,
   getNextConvoIndex,
+  getNextState,
+  checkKeysPressed,
+  log
 } from "./js/utils.js";
 import { plot } from "./data/plot.js";
 
@@ -84,7 +87,10 @@ let story_index = 0;
 let antiBouncer = 0;
 const ANTI_BOUNCER_LIMIT = 10;
 let renderables = {};
+let charState = "default";
+let interactionEnd = false;
 function animate() {
+  log(charState, doc);
   antiBouncer++;
   // read and launch story chapter
   const animationId = window.requestAnimationFrame(animate);
@@ -132,14 +138,10 @@ function animate() {
     }
 
     // Update text after button press logic
-    if (story_index === 0) {
-      title.innerHTML = currentChapter.title;
-      dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
-    }
-    if (story_index > 0) {
-      title.innerHTML = "";
-      dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
-    }
+    
+    title.innerHTML = story_index===0 ? currentChapter.title : "";
+    dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
+  
 
     // set the finish command
 
@@ -150,10 +152,11 @@ function animate() {
   if (chapterType === GAME) {
     const dialogueBox = doc.getElementById("dialogueBox");
     const dialogueBoxText = doc.getElementById("dialogueBoxText");
+    const dialogueBoxTextQuestion = doc.getElementById("dialogueBoxTextQuestion");
     const answersBox = doc.getElementById("answerOptionsWrapper");
+    
     // load renderables
     if (!renderables.toRender) renderables = loadRenderables(currentChapter);
-
     // Clear the canvas before drawing
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -164,6 +167,7 @@ function animate() {
     const player = renderables.player;
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
+    
     if (!player.interacting) {
       movementManager(canvas, keys, lastKey, player, boundaries, characters, renderables.toRender);
       canv_game.style.display = "inline";
@@ -175,64 +179,56 @@ function animate() {
         lastKey === " " &&
         antiBouncer > ANTI_BOUNCER_LIMIT
       ) {
+        console.log("checkForCharacterCollision");
         antiBouncer = 0;
-        checkForCharacterCollision({ characters, player });
+        checkForCharacterCollision({ characters, player, charState, interactionEnd });
+        interactionEnd = false;
         if (player.interacting) {
           dialogueBox.style.display = "inline";
-          const newConvo = interactionConvo(player);
-          dialogueBoxText.innerHTML = newConvo.question;
+          console.log(charState, player);
+          const newConvo = interactionConvo(player, charState) ;
+          if (dialogueBoxTextQuestion) dialogueBoxTextQuestion.innerHTML = newConvo.question;
           answersBox.innerHTML = newConvo.answers;
         }
       }
     }
 
-    let interactionEnd = false;
     if (player.interacting) {
-      if (
-        keys.w.pressed &&
-        lastKey === "w" &&
-        antiBouncer > ANTI_BOUNCER_LIMIT
-      ) {
-        const nextAnswer = nextAnswerIndex(player, lastKey);
-        player.interactionAsset.answerTemp = nextAnswer;
-
-        answersBox.innerHTML = selectNextOption(player, lastKey);
-
-        antiBouncer = 0;
-      }
-      if (
-        keys.s.pressed &&
-        lastKey === "s" &&
-        antiBouncer > ANTI_BOUNCER_LIMIT
-      ) {
-        const nextAnswer = nextAnswerIndex(player, lastKey);
-        player.interactionAsset.answerTemp = nextAnswer;
-        selectNextOption(player, lastKey);
-        answersBox.innerHTML = selectNextOption(player, lastKey);
-
-        antiBouncer = 0;
-      }
-      if (
-        keys.space.pressed &&
-        lastKey === " " &&
-        antiBouncer > ANTI_BOUNCER_LIMIT
-      ) {
-        player.interactionAsset.index = getNextConvoIndex(player);
-        console.log(player.interactionAsset.index);
-        if (player.interactionAsset.index === "END") {
-          interactionEnd = true;
-          player.interacting = false;
-          // break;
-        } else {
-          const newConvo = interactionConvo(player);
-          dialogueBoxText.innerHTML = newConvo.question;
-          answersBox.innerHTML = newConvo.answers;
+      const keyPressed = checkKeysPressed(keys, lastKey, antiBouncer, ANTI_BOUNCER_LIMIT);
+      switch (keyPressed) {
+        case "up": {
+          const nextAnswer = nextAnswerIndex(player, lastKey, charState);
+          player.interactionAsset.answerTemp = nextAnswer;
+          answersBox.innerHTML = selectNextOption(player, charState);
           antiBouncer = 0;
+          break;
         }
+        case "down": {
+          const nextAnswer = nextAnswerIndex(player, lastKey, charState);
+          player.interactionAsset.answerTemp = nextAnswer;
+          answersBox.innerHTML = selectNextOption(player, charState);
+          antiBouncer = 0;
+          break;
+        }
+        case "action": {
+          const nextState = getNextState(player, charState);
+          player.interactionAsset.index = getNextConvoIndex(player, charState);
+          if (player.interactionAsset.index === "END") {
+            charState = nextState
+            dialogueBox.style.display = "none";
+            player.interacting = false;
+            interactionEnd = true;
+          } else {
+            const newConvo = interactionConvo(player, charState);
+            if (dialogueBoxTextQuestion) dialogueBoxTextQuestion.innerHTML = newConvo.question;
+            answersBox.innerHTML = newConvo.answers;
+            antiBouncer = 0;
+          }
+          break;
+        }
+        default:
+          break;
       }
-    }
-    if (interactionEnd) {
-      dialogueBox.style.display = "none";
     }
     // quando vicino ad un altro character, va avanti con un discorso con l'altro character
     // se la discussion ha una sola scelta, con barra si avanza
@@ -476,11 +472,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Ensure minimum touch duration for action button to work with antiBouncer
       const touchDuration = Date.now() - touchStartTime;
-      if (key === ' ' && touchDuration < 50) {
+      if (key === ' ' && touchDuration < ANTI_BOUNCER_LIMIT) {
         // Wait a bit longer for action button to ensure antiBouncer logic works
         setTimeout(() => {
           simulateKeyRelease(key);
-        }, 50 - touchDuration);
+        }, ANTI_BOUNCER_LIMIT - touchDuration);
       } else {
         simulateKeyRelease(key);
       }

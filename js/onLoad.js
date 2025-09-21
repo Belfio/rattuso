@@ -186,7 +186,7 @@ export const loadRenderables = (chapter) => {
           ...characterImages,
         },
         scale: 0.5,
-        interaction: character.interaction,
+        interactions: character.interactions,
         name: character.name,
       })
     );

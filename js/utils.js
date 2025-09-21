@@ -14,7 +14,9 @@ export const checkForCharacterCollision = ({
   characters,
   player,
   characterOffset = { x: 0, y: 0 },
+  interactionEnd = false,
 }) => {
+  if (interactionEnd) return;
   // console.log(player);
   // console.log(characters);
   player.interactionAsset = null;
@@ -291,13 +293,13 @@ export const movementManager = (
   return false;
 };
 
-export const interactionConvo = (player) => {
+export const interactionConvo = (player, charState) => {
   let interactionEnd = false;
   let htmlTextQ = "";
   let htmlTextA = "";
   const index = player.interactionAsset.index;
   const answerTemp = player.interactionAsset.answerTemp;
-  const interaction = player.interactionAsset.character.interaction;
+  const interaction = player.interactionAsset.character.interactions[charState];
   if (interaction.type === "discussion") {
     htmlTextQ = `${interaction.discussion[index].a} `;
 
@@ -305,8 +307,8 @@ export const interactionConvo = (player) => {
       (answer, i) =>
         (htmlTextA =
           htmlTextA +
-          `<div id="dialogueBoxTextResponse" class="answerOption ${
-            answerTemp === i && "selectedAnswer"
+          `<div id="dialogueBoxTextResponse" class="answerOption${
+            answerTemp === i ? " selectedAnswer" : ""
           }">
         ${answer.option}</div>`)
     );
@@ -317,18 +319,19 @@ export const interactionConvo = (player) => {
   return { interactionEnd, htmlText };
 };
 
-export const selectNextOption = (player) => {
+export const selectNextOption = (player, charState) => {
   let htmlTextA = "";
   const index = player.interactionAsset.index;
   const answerTemp = player.interactionAsset.answerTemp;
-  const interaction = player.interactionAsset.character.interaction;
+  const interaction = player.interactionAsset.character.interactions[charState];
+  
   if (interaction.type === "discussion") {
     interaction.discussion[index].b.forEach(
       (answer, i) =>
         (htmlTextA =
           htmlTextA +
-          `<div id="dialogueBoxTextResponse" class="answerOption ${
-            answerTemp === i && "selectedAnswer"
+          `<div id="dialogueBoxTextResponse" class="answerOption${
+            answerTemp === i ? " selectedAnswer" : ""
           }">
         ${answer.option}</div>`)
     );
@@ -338,10 +341,11 @@ export const selectNextOption = (player) => {
   return {};
 };
 
-export const nextAnswerIndex = (player, lastKey) => {
+export const nextAnswerIndex = (player, lastKey, charState) => {
+  
   const index = player.interactionAsset.index;
   const answerTemp = player.interactionAsset.answerTemp;
-  const interaction = player.interactionAsset.character.interaction;
+  const interaction = player.interactionAsset.character.interactions[charState];
   const answersTotNumber = interaction.discussion[index].b.length;
   let newIndex = answerTemp;
 
@@ -361,10 +365,49 @@ export const nextAnswerIndex = (player, lastKey) => {
   return newIndex;
 };
 
-export const getNextConvoIndex = (player) => {
+export const getNextConvoIndex = (player, charState) => {
   const index = player.interactionAsset.index;
   const answerTemp = player.interactionAsset.answerTemp;
-  const interaction = player.interactionAsset.character.interaction;
+  const interaction = player.interactionAsset.character.interactions[charState];
 
   return interaction.discussion[index].b[answerTemp].next;
 };
+
+export const getNextState = (player, charState) => {
+  const index = player.interactionAsset.index;
+  const answerTemp = player.interactionAsset.answerTemp;
+  const interaction = player.interactionAsset.character.interactions[charState];
+
+  return interaction.discussion[index].b[answerTemp].state || "default";
+};
+
+
+export const checkKeysPressed = (keys, lastKey, antiBouncer, antiBouncerLimit) => {
+  if (keys.w.pressed && lastKey === "w" && antiBouncer > antiBouncerLimit) {
+    return "up";
+  }
+  if (keys.s.pressed && lastKey === "s" && antiBouncer > antiBouncerLimit) {
+    return "down";
+  }
+  if (keys.space.pressed && lastKey === " " && antiBouncer > antiBouncerLimit) {
+    return "action";
+  }
+  if (keys.a.pressed && lastKey === "a" && antiBouncer > antiBouncerLimit) {
+    return "left";
+  }
+  if (keys.d.pressed && lastKey === "d" && antiBouncer > antiBouncerLimit) {
+    return "right";
+  }
+  return null;
+};
+
+let oldLog = null;
+export function log(message, doc) {
+  const logBox = doc.getElementById("logs");
+  if(message === oldLog) return;
+  oldLog = message;
+  logBox.innerHTML = message 
+
+}
+
+

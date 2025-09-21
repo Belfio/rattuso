@@ -80,10 +80,10 @@
         },
         "casa.tmx": {
             "scale": 0.5053,
-            "selectedLayer": 11,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 491.7870571937463,
-                "y": 638.2347120522463
+                "x": 583.8115970710469,
+                "y": 539.2835939046112
             }
         },
         "tileset.tsx": {
@@ -104,8 +104,8 @@
     ],
     "project": "Rattuso.tiled-project",
     "recentFiles": [
-        "Basic Grass Biom things 1.tsx",
         "casa.tmx",
+        "Basic Grass Biom things 1.tsx",
         "Room_Builder_free_16x16.tsx",
         "tileset.tsx",
         "/Users/alfredo/Downloads/Tiled/Pellet Town.tmx"

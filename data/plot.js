@@ -44,27 +44,31 @@ export const plot = {
           url: "", // Character sprite URL (currently empty)
           direction: "up", // Which direction the character is facing initially
           position: { x: 260, y: 320 }, // Character position in world coordinates
-          interaction: { // Defines how player can interact with this character
-            type: "discussion", // Interaction type - branching dialogue
-            discussion: [ // Array of dialogue nodes
-              {
-                a: "- Ispettore, Nieddu sono!",
-                b: [
-                  {
-                    option: "- Non è giornata Nieddu, passa più tardi...",
-                    next: 1,
-                  },
-                  {
-                    option: "- Dimmi che mi hai portato un caffè Nieddu",
-                    next: "END",
-                  },
-                ],
-              },
-              {
-                a: "Abbiamo un'emergenza Ispettore!", // Character's response
-                b: [{ option: "-Che palle...", next: "END" }], // Single response option
-              },
-            ],
+          interactions: {
+            default:
+              { // Defines how player can interact with this character
+              type: "discussion", // Interaction type - branching dialogue
+              discussion: [ // Array of dialogue nodes
+                {
+                  a: "- Ispettore, Nieddu sono!",
+                  b: [
+                    {
+                      option: "- Non è giornata Nieddu, passa più tardi...",
+                      next: 1,
+                    },
+                    {
+                      option: "- Dimmi che mi hai portato un caffè Nieddu",
+                      state: "caffe",
+                      next: "END",
+                    },
+                  ],
+                },
+                {
+                  a: "Abbiamo un'emergenza Ispettore!", // Character's response
+                  b: [{ option: "-Che palle...", next: "END" }], // Single response option
+                },
+              ],
+            }
           },
         },
       ],
