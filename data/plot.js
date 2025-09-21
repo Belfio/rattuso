@@ -41,14 +41,14 @@ export const plot = {
             type: "discussion",
             discussion: [
               {
-                a: "-Ispettore, Nieddu sono!",
+                a: "- Ispettore, Nieddu sono!",
                 b: [
                   {
-                    option: "-Non è giornata Nieddu, passa più tardi...",
+                    option: "- Non è giornata Nieddu, passa più tardi...",
                     next: 1,
                   },
                   {
-                    option: "-Dimmi che mi hai portato un caffè Nieddu",
+                    option: "- Dimmi che mi hai portato un caffè Nieddu",
                     next: "END",
                   },
                 ],

@@ -20,7 +20,7 @@ let currentChapter;
 let i = 0;
 let story_index = 0;
 let antiBouncer = 0;
-const ANTI_BOUNCER_LIMIT = 20;
+const ANTI_BOUNCER_LIMIT = 10;
 let renderables = {};
 function animate() {
   antiBouncer++;
