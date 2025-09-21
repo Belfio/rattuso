@@ -11,8 +11,70 @@ import {
 } from "./js/utils.js";
 import { plot } from "./data/plot.js";
 
-canvas.width = 960;
-canvas.height = 640;
+// Set canvas size based on device
+function setupCanvas() {
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Mobile: Use full screen dimensions as canvas resolution
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  } else {
+    // Desktop: Use fixed size
+    canvas.width = 960;
+    canvas.height = 640;
+    canvas.style.width = '960px';
+    canvas.style.height = '640px';
+  }
+
+  canvas.style.position = 'absolute';
+  canvas.style.left = '0px';
+  canvas.style.top = '0px';
+}
+
+// Function to resize canvas for mobile
+function resizeCanvas() {
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Update canvas to current screen size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
+
+  // Update comic div for mobile
+  const comicDiv = document.getElementById('comic_div');
+  if (comicDiv && isMobile) {
+    comicDiv.style.width = window.innerWidth + 'px';
+    comicDiv.style.height = window.innerHeight + 'px';
+    comicDiv.style.position = 'absolute';
+    comicDiv.style.left = '0px';
+    comicDiv.style.top = '0px';
+    comicDiv.style.overflow = 'hidden';
+  }
+
+  // Update comic background for mobile (keep original aspect ratio but cover screen)
+  const comicBackground = document.getElementById('comic_background');
+  if (comicBackground && isMobile) {
+    comicBackground.style.width = '100%';
+    comicBackground.style.height = '100%';
+    comicBackground.style.objectFit = 'cover';
+  }
+}
+
+// Initialize canvas
+setupCanvas();
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    setupCanvas();
+    resizeCanvas();
+  }, 100);
+});
 
 let lastKey = "";
 let chapterType = IDLE;
@@ -103,7 +165,7 @@ function animate() {
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
     if (!player.interacting) {
-      movementManager(canvas, keys, lastKey, player, boundaries, characters);
+      movementManager(canvas, keys, lastKey, player, boundaries, characters, renderables.toRender);
       canv_game.style.display = "inline";
       comic_page.style.display = "none";
 

@@ -47,21 +47,27 @@ export const movementManager = (
   lastKey,
   player,
   boundaries,
-  characters
+  characters,
+  renderables
 ) => {
   let moving = true;
   player.animate = false;
 
+  // Camera system configuration - works with full-screen mobile canvas
+  const VIEWPORT_CENTER_X = canvas.width / 2;
+  const VIEWPORT_CENTER_Y = canvas.height / 2;
+
+  // Get background to determine map boundaries (background keeps original size)
+  const background = renderables.find(r => r.constructor.name === 'Sprite' && r.image && !r.sprites);
+  const mapWidth = background ? background.image.naturalWidth || background.image.width : 960;
+  const mapHeight = background ? background.image.naturalHeight || background.image.height : 640;
+
   if (keys.w.pressed && lastKey === "w") {
     player.animate = true;
     player.image = player.sprites.up;
-    if (player.position.y <= 0) return;
-    // checkForCharacterCollision({
-    //   characters,
-    //   player,
-    //   characterOffset: { x: 0, y: 3 },
-    // });
 
+    // Check for collisions before moving
+    let canMove = true;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
@@ -76,16 +82,43 @@ export const movementManager = (
           },
         })
       ) {
-        moving = false;
+        canMove = false;
         break;
       }
     }
 
-    if (moving) player.position.y -= 3;
+    if (canMove) {
+      const backgroundY = background ? background.position.y : 0;
+
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
+
+      if (!isPlayerCentered && player.position.y > VIEWPORT_CENTER_Y) {
+        // Phase 1: Move player toward center from below, keep map still
+        player.position.y -= 3;
+      } else {
+        // Phase 2: Player is centered, check map boundaries
+        const atMapTop = backgroundY >= 0; // Map's top edge is at or past screen top
+
+        if (!atMapTop) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.y += 3;
+            }
+          });
+        } else {
+          // Map is at top boundary - now move player toward top edge
+          const minY = 10; // Minimum distance from top edge
+          if (player.position.y > minY) {
+            player.position.y -= 3;
+          }
+        }
+      }
+    }
   } else if (keys.a.pressed && lastKey === "a") {
     player.animate = true;
     player.image = player.sprites.left;
-    if (player.position.x <= 0) return;
 
     checkForCharacterCollision({
       characters,
@@ -93,6 +126,7 @@ export const movementManager = (
       characterOffset: { x: 3, y: 0 },
     });
 
+    let canMove = true;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
@@ -107,23 +141,45 @@ export const movementManager = (
           },
         })
       ) {
-        moving = false;
+        canMove = false;
         break;
       }
     }
 
-    if (moving) player.position.x -= 3;
+    if (canMove) {
+      const backgroundX = background ? background.position.x : 0;
+
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
+
+      if (!isPlayerCentered && player.position.x > VIEWPORT_CENTER_X) {
+        // Phase 1: Move player toward center from the right, keep map still
+        player.position.x -= 3;
+      } else {
+        // Phase 2: Player is centered, check map boundaries
+        const atMapLeft = backgroundX >= 0; // Map's left edge is at or past screen left
+
+        if (!atMapLeft) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.x += 3;
+            }
+          });
+        } else {
+          // Map is at left boundary - now move player toward left edge
+          const minX = 10; // Minimum distance from left edge
+          if (player.position.x > minX) {
+            player.position.x -= 3;
+          }
+        }
+      }
+    }
   } else if (keys.s.pressed && lastKey === "s") {
     player.animate = true;
     player.image = player.sprites.down;
-    if (player.position.y >= canvas.height) return;
 
-    // checkForCharacterCollision({
-    //   characters,
-    //   player,
-    //   characterOffset: { x: 0, y: -3 },
-    // });
-
+    let canMove = true;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
@@ -138,12 +194,40 @@ export const movementManager = (
           },
         })
       ) {
-        console.log(boundary, player);
-        moving = false;
+        canMove = false;
         break;
       }
     }
-    if (moving) player.position.y += 3;
+
+    if (canMove) {
+      const backgroundY = background ? background.position.y : 0;
+
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.y - VIEWPORT_CENTER_Y) <= 5;
+
+      if (!isPlayerCentered && player.position.y < VIEWPORT_CENTER_Y) {
+        // Phase 1: Move player toward center from above, keep map still
+        player.position.y += 3;
+      } else {
+        // Phase 2: Player is centered, check map boundaries
+        const atMapBottom = backgroundY <= -(mapHeight - canvas.height); // Map's bottom edge is at or past screen bottom
+
+        if (!atMapBottom) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.y -= 3;
+            }
+          });
+        } else {
+          // Map is at bottom boundary - now move player toward bottom edge
+          const maxY = canvas.height - 50; // Minimum distance from bottom edge
+          if (player.position.y < maxY) {
+            player.position.y += 3;
+          }
+        }
+      }
+    }
   } else if (keys.d.pressed && lastKey === "d") {
     player.animate = true;
     player.image = player.sprites.right;
@@ -154,6 +238,7 @@ export const movementManager = (
       characterOffset: { x: -3, y: 0 },
     });
 
+    let canMove = true;
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
       if (
@@ -168,12 +253,40 @@ export const movementManager = (
           },
         })
       ) {
-        moving = false;
+        canMove = false;
         break;
       }
     }
 
-    if (moving) player.position.x += 3;
+    if (canMove) {
+      const backgroundX = background ? background.position.x : 0;
+
+      // Check if player is centered (within 5px tolerance)
+      const isPlayerCentered = Math.abs(player.position.x - VIEWPORT_CENTER_X) <= 5;
+
+      if (!isPlayerCentered && player.position.x < VIEWPORT_CENTER_X) {
+        // Phase 1: Move player toward center from the left, keep map still
+        player.position.x += 3;
+      } else {
+        // Phase 2: Player is centered, check map boundaries
+        const atMapRight = backgroundX <= -(mapWidth - canvas.width); // Map's right edge is at or past screen right
+
+        if (!atMapRight) {
+          // Map can still move - normal camera following
+          renderables.forEach(renderable => {
+            if (renderable !== player) {
+              renderable.position.x -= 3;
+            }
+          });
+        } else {
+          // Map is at right boundary - now move player toward right edge
+          const maxX = canvas.width - 50; // Minimum distance from right edge
+          if (player.position.x < maxX) {
+            player.position.x += 3;
+          }
+        }
+      }
+    }
   }
   return false;
 };
