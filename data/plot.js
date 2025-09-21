@@ -55,11 +55,11 @@ export const plot = {
                   a: '- Ispettore, Nieddu sono!',
                   b: [
                     {
-                      option: '- Non è giornata Nieddu, passa più tardi...',
+                      option: '> Non è giornata Nieddu, passa più tardi...',
                       next: 1,
                     },
                     {
-                      option: '- Dimmi che mi hai portato un caffè Nieddu',
+                      option: '> Dimmi che mi hai portato un caffè Nieddu',
                       state: 'caffe',
                       next: 'CHAPTER_END',
                     },
@@ -67,7 +67,7 @@ export const plot = {
                 },
                 {
                   a: "Abbiamo un'emergenza Ispettore!", // Character's response
-                  b: [{ option: '-Che palle...', next: 'END' }], // Single response option
+                  b: [{ option: '> Che palle...', next: 'END' }], // Single response option
                 },
               ],
             },
@@ -114,7 +114,11 @@ export const plot = {
                   a: 'Armadio',
                   b: [
                     {
-                      option: 'Quando stirerò un camicia...',
+                      option: 'Apri',
+                      next: 1,
+                    },
+                    {
+                      option: '> Profumo di camicia usata...',
                       next: 'END',
                     },
                   ],
@@ -137,7 +141,11 @@ export const plot = {
                   a: 'Frigo',
                   b: [
                     {
-                      option: 'Mai un cazzo qua dentro...',
+                      option: 'Apri',
+                      next: 1,
+                    },
+                    {
+                      option: '> Mai un cazzo qua dentro...',
                       next: 'END',
                     },
                   ],
@@ -160,8 +168,12 @@ export const plot = {
                   a: 'Srivania',
                   b: [
                     {
-                      option: 'Solo spam',
-                      next: 'END',
+                      option: 'Accendi PC',
+                      next: 1,
+                    },
+                    {
+                      option: 'Fai finta di niente',
+                      next: "END",
                     },
                   ],
                 },
