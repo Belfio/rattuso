@@ -34,6 +34,7 @@ export class Sprite {
     this.interacting = false;
     this.interactions = interactions;
     this.name = name;
+    this.mapOffset = { x: 0, y: 0 };
   }
 
   draw() {

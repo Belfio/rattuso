@@ -1,18 +1,27 @@
 function rectangularCollision({ rectangle1, rectangle2 }) {
-  //colliding == is rectangle1 inside rectangle2, check the corners
-  // top left corner
+  // Use explicit collision size if provided; otherwise fall back to sprite size
+  const r1w = rectangle1.width || 1;
+  const r1h = rectangle1.height || 1;
+  const r2w = rectangle2.collisionWidth || rectangle2.width || 1;
+  const r2h = rectangle2.collisionHeight || rectangle2.height || 1;
 
+  const r1x = rectangle1.position.x;
+  const r1y = rectangle1.position.y;
+  const r2x = (rectangle2.position.x + (rectangle2.collisionOffsetX || 0));
+  const r2y = (rectangle2.position.y + (rectangle2.collisionOffsetY || 0));
+
+  // Standard AABB overlap
   return (
-    rectangle1.position.x > rectangle2.position.x - rectangle2.width / 2 &&
-    rectangle1.position.x < rectangle2.position.x + rectangle2.width &&
-    rectangle1.position.y > rectangle2.position.y - rectangle2.height &&
-    rectangle1.position.y < rectangle2.position.y + rectangle2.height / 2
+    r1x < r2x + r2w &&
+    r1x + r1w > r2x &&
+    r1y < r2y + r2h &&
+    r1y + r1h > r2y
   );
 }
 
 export const checkForPlayerCollision = ({
   characters,
-  objects,
+  objects=[],
   player,
   characterOffset = { x: 0, y: 0 },
   interactionEnd = false,
@@ -20,11 +29,10 @@ export const checkForPlayerCollision = ({
   if (interactionEnd) {
     return;
   }
-  console.log(player.position);
   
   player.interactionAsset = null;
   const collisionObjects = [...characters, ...objects];
-  console.log(collisionObjects);
+
   // monitor for character collision
   for (let i = 0; i < collisionObjects.length; i++) {
     const target = collisionObjects[i];
@@ -41,6 +49,7 @@ export const checkForPlayerCollision = ({
         },
       })
     ) {
+      console.log("collision with", target.name);
       player.interactionAsset = { character: target, index: 0, answerTemp: 0 };
       player.interacting = true;
       break;
@@ -48,36 +57,6 @@ export const checkForPlayerCollision = ({
   }
 };
 
-export const checkForCharacterCollision = ({
-  characters,
-  player,
-  characterOffset = { x: 0, y: 0 },
-  interactionEnd = false,
-}) => {
-  if (interactionEnd) {
-    return;
-  }
-  player.interactionAsset = null;
-  for (let i = 0; i < characters.length; i++) {
-    const character = characters[i];
-    if (
-      rectangularCollision({
-        rectangle1: player,
-        rectangle2: {
-          ...character,
-          position: {
-            x: character.position.x + characterOffset.x,
-            y: character.position.y + characterOffset.y,
-          },
-        },
-      })
-    ) {
-      player.interactionAsset = { character, index: 0, answerTemp: 0 };
-      player.interacting = true;
-      break;
-    }
-  }
-};
 
 export const movementManager = (
   canvas,
@@ -87,7 +66,7 @@ export const movementManager = (
   boundaries,
   characters,
   renderables,
-  objects
+  objects = [],
 ) => {
   const SPEED = 3;
   player.animate = false;
@@ -136,7 +115,7 @@ export const movementManager = (
 
   // Character interaction checks (only for horizontal, matching original behavior)
   if (direction === 'left') {
-    checkForCharacterCollision({
+    checkForPlayerCollision({
       characters,
       player,
       characterOffset: { x: SPEED, y: 0 },
@@ -147,7 +126,7 @@ export const movementManager = (
       return false;
     }
   } else if (direction === 'right') {
-    checkForCharacterCollision({
+    checkForPlayerCollision({
       characters,
       player,
       characterOffset: { x: -SPEED, y: 0 },
@@ -159,20 +138,26 @@ export const movementManager = (
     }
   }
 
-  // Directional offsets for boundary collision pre-check
-  let boundaryOffset = { x: 0, y: 0 };
+  // Compute player's next position for collision pre-check using a point near the feet
+  const playerCollisionX = (player.position.x + ((player.width || 0) / 2));
+  const playerCollisionY = (player.position.y + ((player.height || 0) * 0.8));
+  const nextPlayer = {
+    position: { x: playerCollisionX, y: playerCollisionY },
+    width: 1,
+    height: 1,
+  };
   switch (direction) {
     case 'up':
-      boundaryOffset = { x: 0, y: SPEED };
+      nextPlayer.position.y -= SPEED;
       break;
     case 'down':
-      boundaryOffset = { x: 0, y: -SPEED };
+      nextPlayer.position.y += SPEED;
       break;
     case 'left':
-      boundaryOffset = { x: SPEED, y: 0 };
+      nextPlayer.position.x -= SPEED;
       break;
     case 'right':
-      boundaryOffset = { x: -SPEED, y: 0 };
+      nextPlayer.position.x += SPEED;
       break;
   }
 
@@ -182,14 +167,8 @@ export const movementManager = (
     const boundary = boundaries[i];
     if (
       rectangularCollision({
-        rectangle1: player,
-        rectangle2: {
-          ...boundary,
-          position: {
-            x: boundary.position.x + boundaryOffset.x,
-            y: boundary.position.y + boundaryOffset.y,
-          },
-        },
+        rectangle1: nextPlayer,
+        rectangle2: boundary,
       })
     ) {
       canMove = false;
@@ -237,6 +216,18 @@ export const movementManager = (
             : -SPEED;
         }
       });
+      // Keep non-rendered interactive objects in sync with map movement
+      if (objects && objects.length) {
+        objects.forEach(object => {
+          object.position[axis] += (direction === 'up' || direction === 'left')
+            ? SPEED
+            : -SPEED;
+        });
+      }
+      player.mapOffset[axis] += (direction === 'up' || direction === 'left')
+        ? -SPEED
+        : SPEED;
+      
     } else {
       // Map at boundary - move player toward screen edge within limits
       if (direction === 'up') {

@@ -202,6 +202,35 @@ export const loadRenderables = chapter => {
       })
     );
   });
+  
+  const objects = []
+  chapter.objects.forEach(object => { 
+    const sprite = new Sprite({
+      position: { x: object.position.x + backgroundOffsetX, y: object.position.y + backgroundOffsetY },
+      image: playerDownImage,
+      frames: { max: 1, hold: 10 },
+      sprites: {},
+      animate: false,
+      rotation: 0,
+      scale: 1,
+      interactions: object.interactions,
+      name: object.name,
+    });
+    // Attach explicit collision box dimensions from plot data
+    sprite.collisionWidth = object.width;
+    sprite.collisionHeight = object.height;
+    // Optional per-object fine-tuning offsets
+    sprite.collisionOffsetX = object.collisionOffset?.x || 0;
+    sprite.collisionOffsetY = object.collisionOffset?.y || 0;
+    // Temporary named tweaks based on feedback
+    if (object.name === 'scrivania') {
+      sprite.collisionOffsetY = (sprite.collisionOffsetY || 0) + 10; // move hitbox slightly down
+    }
+    if (object.name === 'armadio') {
+      sprite.collisionOffsetX = (sprite.collisionOffsetX || 0) + 30; // shift hitbox to the right
+    }
+    objects.push(sprite);
+  });
 
   return {
     toRender: [
@@ -215,5 +244,6 @@ export const loadRenderables = chapter => {
     player,
     boundaries,
     characters,
+    objects,
   };
 };

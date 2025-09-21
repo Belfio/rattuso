@@ -90,6 +90,7 @@ let renderables = {};
 let charState = 'default';
 let interactionEnd = false;
 let chapterEnd = false;
+const DEBUG_HITBOXES = true;
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -192,7 +193,22 @@ function animate() {
     const player = renderables.player;
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
-    const objects = currentChapter.objects;
+    const objects = renderables.objects;
+
+    // Debug: draw object hitboxes to verify alignment
+    if (DEBUG_HITBOXES && Array.isArray(objects)) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0,255,0,0.6)';
+      ctx.lineWidth = 2;
+      objects.forEach(o => {
+        const w = o.collisionWidth || o.width || 0;
+        const h = o.collisionHeight || o.height || 0;
+        const ox = (o.collisionOffsetX || 0);
+        const oy = (o.collisionOffsetY || 0);
+        ctx.strokeRect(o.position.x + ox, o.position.y + oy, w, h);
+      });
+      ctx.restore();
+    }
 
     if (!player.interacting) {
       movementManager(
@@ -217,6 +233,9 @@ function animate() {
       );
       if (keyPressed === 'action') {
         console.log('checkForPlayerCollision');
+        console.log(player.position.x, player.position.y);
+        console.log(objects[1].name, objects[1].position.x-objects[1].width/2, objects[1].position.y-objects[1].height/2);
+        console.log(objects[0].name, objects[0].position.x-objects[0].width/2, objects[0].position.y-objects[0].height/2);
         antiBouncer = 0;
         checkForPlayerCollision({
           characters,

@@ -104,7 +104,7 @@ export const plot = {
         {
           type: 'object',
           name: 'armadio',
-          position: { x: 157, y: 81},
+          position: { x: 144, y: 81},
           width: 30,
           height: 74,
           interactions: {
@@ -122,17 +122,17 @@ export const plot = {
                   ],
                 },
                 {
-                  a: 'Armadio aprte',
+                  a: 'Armadio aperto',
                   b: [{ option: '> Profumo di camicia usata...', next: 'END' }], // Single response option
                 },
               ],
             },
           },
         },
-                {
+        {
           type: 'object',
           name: 'frigo',
-          position: { x: 202, y: 81},
+          position: { x: 290, y: 81},
           width: 35,
           height: 74,
           interactions: {
@@ -157,11 +157,11 @@ export const plot = {
             },
           },
         },
-                {
+        {
           type: 'object',
           name: 'scrivania',
-          position: { x: 202, y: 176},
-          width: 27,
+          position: { x: 290, y: 160},
+          width: 40,
           height: 75,
           interactions: {
             default: {
