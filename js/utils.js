@@ -342,10 +342,12 @@ export const selectNextOption = (player, charState) => {
 };
 
 export const nextAnswerIndex = (player, lastKey, charState) => {
-  
+  try{
   const index = player.interactionAsset.index;
   const answerTemp = player.interactionAsset.answerTemp;
   const interaction = player.interactionAsset.character.interactions[charState];
+  console.log(interaction);
+  console.log(charState);
   const answersTotNumber = interaction.discussion[index].b.length;
   let newIndex = answerTemp;
 
@@ -363,6 +365,16 @@ export const nextAnswerIndex = (player, lastKey, charState) => {
       break;
   }
   return newIndex;
+  } catch (error) {
+
+    console.log("Probably something wrong with the plot");
+    const index = player.interactionAsset.index;
+    const answerTemp = player.interactionAsset.answerTemp;
+    console.log(index);
+    console.log(answerTemp);
+    console.log(charState);
+    return 0;
+  }
 };
 
 export const getNextConvoIndex = (player, charState) => {

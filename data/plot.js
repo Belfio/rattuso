@@ -68,6 +68,30 @@ export const plot = {
                   b: [{ option: "-Che palle...", next: "END" }], // Single response option
                 },
               ],
+            },
+            caffe:
+              { // Defines how player can interact with this character
+              type: "discussion", // Interaction type - branching dialogue
+              discussion: [ // Array of dialogue nodes
+                {
+                  a: "- Ispettore, Nieddu sono!",
+                  b: [
+                    {
+                      option: "- Non è giornata Nieddu, passa più tardi...",
+                      next: 1,
+                    },
+                    {
+                      option: "- Dimmi che mi hai portato un caffè Nieddu",
+                      state: "caffe",
+                      next: "END",
+                    },
+                  ],
+                },
+                {
+                  a: "Abbiamo un'emergenza Ispettore!", // Character's response
+                  b: [{ option: "-Che palle...", next: "END" }], // Single response option
+                },
+              ],
             }
           },
         },
