@@ -89,6 +89,7 @@ const ANTI_BOUNCER_LIMIT = 10;
 let renderables = {};
 let charState = "default";
 let interactionEnd = false;
+let chapterEnd = false;
 function animate() {
   log(charState, doc);
   antiBouncer++;
@@ -99,6 +100,7 @@ function animate() {
   const canv_game = doc.getElementById("canvas");
 
   if (chapterType === IDLE) {
+    chapterEnd = false;
     currentChapter = plot.story[i];
     chapterType = currentChapter.type;
     i++;
@@ -218,26 +220,33 @@ function animate() {
             dialogueBox.style.display = "none";
             player.interacting = false;
             interactionEnd = true;
-          } else {
-            const newConvo = interactionConvo(player, charState);
-            if (dialogueBoxTextQuestion) dialogueBoxTextQuestion.innerHTML = newConvo.question;
-            answersBox.innerHTML = newConvo.answers;
-            antiBouncer = 0;
+            break;
           }
+          if (player.interactionAsset.index === "CHAPTER_END") {
+            charState = nextState
+            dialogueBox.style.display = "none";
+            player.interacting = false;
+            interactionEnd = true;
+            chapterEnd = true;
+            break;
+          }
+          const newConvo = interactionConvo(player, charState);
+          if (dialogueBoxTextQuestion) dialogueBoxTextQuestion.innerHTML = newConvo.question;
+          answersBox.innerHTML = newConvo.answers;
+          antiBouncer = 0;
+          
           break;
         }
         default:
           break;
       }
     }
-    // quando vicino ad un altro character, va avanti con un discorso con l'altro character
-    // se la discussion ha una sola scelta, con barra si avanza
-    // se ne ha due o più serve scegliere
-    let chapterEnd;
+
     if (chapterEnd) {
+      console.log("chapterEnd");
       renderables = {};
-      i++;
       chapterType = IDLE;
+      chapterEnd = false;
     }
   }
 }

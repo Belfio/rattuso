@@ -276,7 +276,7 @@
          "name":"Furniture",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":30,
          "x":0,
          "y":0
@@ -381,25 +381,25 @@
          "objects":[
                 {
                  "class":"1",
-                 "height":65.3077379774391,
+                 "height":65.3077,
                  "id":2,
                  "name":"Frigo",
                  "rotation":0,
                  "visible":false,
-                 "width":27.7063130813378,
-                 "x":290.916287354047,
-                 "y":79.1608945181081
+                 "width":27.7063,
+                 "x":290.916,
+                 "y":79.1609
                 }, 
                 {
                  "class":"",
-                 "height":67.2867603403919,
+                 "height":67.2868,
                  "id":7,
                  "name":"Frigo",
                  "rotation":0,
                  "visible":true,
-                 "width":35.6224025331487,
-                 "x":288.937264991094,
-                 "y":81.1399168810608
+                 "width":35.6224,
+                 "x":288.937,
+                 "y":81.1399
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -410,18 +410,18 @@
         {
          "draworder":"topdown",
          "id":15,
-         "name":"Object Layer 2",
+         "name":"Armadio",
          "objects":[
                 {
                  "class":"",
-                 "height":71.2448050662973,
+                 "height":71.2448,
                  "id":11,
                  "name":"Armadio",
                  "rotation":0,
                  "visible":true,
-                 "width":53.433603799723,
-                 "x":162.279833762122,
-                 "y":77.1818721551554
+                 "width":53.4336,
+                 "x":162.28,
+                 "y":77.1819
                 }],
          "opacity":1,
          "type":"objectgroup",

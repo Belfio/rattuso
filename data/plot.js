@@ -59,7 +59,7 @@ export const plot = {
                     {
                       option: "- Dimmi che mi hai portato un caffè Nieddu",
                       state: "caffe",
-                      next: "END",
+                      next: "CHAPTER_END",
                     },
                   ],
                 },
@@ -89,7 +89,77 @@ export const plot = {
                 },
                 {
                   a: "Abbiamo un'emergenza Ispettore!", // Character's response
-                  b: [{ option: "-Che palle...", next: "END" }], // Single response option
+                  b: [{ option: "-Che palle...", next: "CHAPTER_END" }], // Single response option
+                },
+              ],
+            }
+          },
+        },
+      ],
+    },
+        {
+      title: "", // No title for game scenes
+      type: GAME, // Interactive gameplay scene
+      background: "casa.png", // Background map image
+      collisions_name: "home", // References collision data for boundaries
+      player: {
+        position: { x: 40, y: 180 }, // Starting position in world coordinates
+        interactions: [], // Player-specific interactions (currently empty)
+        name: "Rattuso", // Player character name
+      },
+      characters: [ // NPCs in this scene
+        {
+          type: "friend", // Character type/relationship
+          name: "Nieddu", // Character name
+          url: "", // Character sprite URL (currently empty)
+          direction: "up", // Which direction the character is facing initially
+          position: { x: 260, y: 320 }, // Character position in world coordinates
+          interactions: {
+            default:
+              { // Defines how player can interact with this character
+              type: "discussion", // Interaction type - branching dialogue
+              discussion: [ // Array of dialogue nodes
+                {
+                  a: "- Ispettore, Nieddu sono!",
+                  b: [
+                    {
+                      option: "- Non è giornata Nieddu, passa più tardi...",
+                      next: 1,
+                    },
+                    {
+                      option: "- Dimmi che mi hai portato un caffè Nieddu",
+                      state: "caffe",
+                      next: "END",
+                    },
+                  ],
+                },
+                {
+                  a: "Abbiamo un'emergenza Ispettore!", // Character's response
+                  b: [{ option: "-Che palle...", next: "CHAPTER_END" }], // Single response option
+                },
+              ],
+            },
+            caffe:
+              { // Defines how player can interact with this character
+              type: "discussion", // Interaction type - branching dialogue
+              discussion: [ // Array of dialogue nodes
+                {
+                  a: "- Ispettore, Nieddu sono!",
+                  b: [
+                    {
+                      option: "- Non è giornata Nieddu, passa più tardi...",
+                      next: 1,
+                    },
+                    {
+                      option: "- Dimmi che mi hai portato un caffè Nieddu",
+                      state: "caffe",
+                      next: "END",
+                    },
+                  ],
+                },
+                {
+                  a: "Abbiamo un'emergenza Ispettore!", // Character's response
+                  b: [{ option: "-Che palle...", next: "CHAPTER_END" }], // Single response option
                 },
               ],
             }
