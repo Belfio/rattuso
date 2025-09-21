@@ -77,12 +77,12 @@ window.addEventListener('orientationchange', () => {
 });
 
 let lastKey = "";
-let gameState = IDLE;
+let chapterType = IDLE;
 let currentChapter;
 let i = 0;
 let story_index = 0;
 let antiBouncer = 0;
-const ANTI_BOUNCER_LIMIT = 20;
+const ANTI_BOUNCER_LIMIT = 10;
 let renderables = {};
 function animate() {
   antiBouncer++;
@@ -92,13 +92,13 @@ function animate() {
   const comic_page = doc.getElementById("comic_div");
   const canv_game = doc.getElementById("canvas");
 
-  if (gameState === IDLE) {
+  if (chapterType === IDLE) {
     currentChapter = plot.story[i];
-    gameState = currentChapter.type;
+    chapterType = currentChapter.type;
     i++;
     story_index = 0;
   }
-  if (gameState === COMIC) {
+  if (chapterType === COMIC) {
     const comic_background = doc.getElementById("comic_background");
     const dialogueComimBoxText = doc.getElementById("dialogue_box_comic_text");
     const dialogueBox = doc.getElementById("dialogue_box_comic");
@@ -142,11 +142,12 @@ function animate() {
     }
 
     // set the finish command
-    if (story_index === currentChapter.discussion.length) gameState = IDLE;
+
+    if (story_index === currentChapter.discussion.length) chapterType = IDLE;
     // console.log(comic_page);
     // dialogueBox.style.display = "inline";
   }
-  if (gameState === GAME) {
+  if (chapterType === GAME) {
     const dialogueBox = doc.getElementById("dialogueBox");
     const dialogueBoxText = doc.getElementById("dialogueBoxText");
     const answersBox = doc.getElementById("answerOptionsWrapper");
@@ -240,7 +241,7 @@ function animate() {
     if (chapterEnd) {
       renderables = {};
       i++;
-      gameState = IDLE;
+      chapterType = IDLE;
     }
   }
 }

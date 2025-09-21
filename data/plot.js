@@ -48,15 +48,15 @@ export const plot = {
             type: "discussion", // Interaction type - branching dialogue
             discussion: [ // Array of dialogue nodes
               {
-                a: "-Ispettore, Nieddu sono!", // Character's dialogue line
-                b: [ // Player response options
+                a: "- Ispettore, Nieddu sono!",
+                b: [
                   {
-                    option: "-Non è giornata Nieddu, passa più tardi...", // Response text
-                    next: 1, // Index of next dialogue node
+                    option: "- Non è giornata Nieddu, passa più tardi...",
+                    next: 1,
                   },
                   {
-                    option: "-Dimmi che mi hai portato un caffè Nieddu", // Response text
-                    next: "END", // Special value to end conversation
+                    option: "- Dimmi che mi hai portato un caffè Nieddu",
+                    next: "END",
                   },
                 ],
               },
