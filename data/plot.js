@@ -90,6 +90,7 @@ export const plot = {
                     },
                   ],
                 },
+
                 {
                   a: "Abbiamo un'emergenza Ispettore!", // Character's response
                   b: [{ option: '-Che palle...', next: 'CHAPTER_END' }], // Single response option
@@ -117,11 +118,12 @@ export const plot = {
                       option: 'Apri',
                       next: 1,
                     },
-                    {
-                      option: '> Profumo di camicia usata...',
-                      next: 'END',
-                    },
+                    
                   ],
+                },
+                {
+                  a: 'Armadio aprte',
+                  b: [{ option: '> Profumo di camicia usata...', next: 'END' }], // Single response option
                 },
               ],
             },
@@ -144,11 +146,12 @@ export const plot = {
                       option: 'Apri',
                       next: 1,
                     },
-                    {
-                      option: '> Mai un cazzo qua dentro...',
-                      next: 'END',
-                    },
+                    
                   ],
+                },
+                {
+                  a: 'Frigo aperto',
+                  b: [{ option: '> Mai un cazzo qua dentro...', next: 'END' }], // Single response option
                 },
               ],
             },
@@ -171,12 +174,15 @@ export const plot = {
                       option: 'Accendi PC',
                       next: 1,
                     },
-                    {
-                      option: 'Fai finta di niente',
-                      next: "END",
-                    },
+                    { option: 'Fai finta di niente', next: 'END' }
+
                   ],
+
                 },
+                {
+                  a: 'Srivania',
+                  b: [{ option: '> 415 email...', next: 'END' }], // Single response option
+                }
               ],
             },
           },
