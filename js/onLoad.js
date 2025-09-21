@@ -1,6 +1,7 @@
 import { Sprite } from "../classes.js";
 import { Boundary } from "../classes.js";
 import { collisions } from "../data/collisions.js";
+import { objects2 } from "../data/objects2.js";
 const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
   const collisionsMap = [];
   for (let i = 0; i < 570; i += 30) {

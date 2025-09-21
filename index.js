@@ -90,12 +90,27 @@ let renderables = {};
 let charState = "default";
 let interactionEnd = false;
 let chapterEnd = false;
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+//
+//
+//                RATTUSO GAME ENGINE LOOP
+//
+//
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+
 function animate() {
+
+  // debuggin text to html
   log(charState, doc);
+  
+  // antibouncer for the action button
   antiBouncer++;
+  
   // read and launch story chapter
-  const animationId = window.requestAnimationFrame(animate);
-  // Loading level 0
+  window.requestAnimationFrame(animate);
   const comic_page = doc.getElementById("comic_div");
   const canv_game = doc.getElementById("canvas");
 
@@ -169,9 +184,10 @@ function animate() {
     const player = renderables.player;
     const boundaries = renderables.boundaries;
     const characters = renderables.characters;
+    const objects = renderables.objects;
     
     if (!player.interacting) {
-      movementManager(canvas, keys, lastKey, player, boundaries, characters, renderables.toRender);
+      movementManager(canvas, keys, lastKey, player, boundaries, characters, renderables.toRender, objects);
       canv_game.style.display = "inline";
       comic_page.style.display = "none";
 
@@ -252,6 +268,9 @@ function animate() {
 }
 
 animate();
+
+
+
 
 window.addEventListener("keydown", (e) => {
   // if (player.isInteracting) {
