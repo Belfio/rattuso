@@ -104,8 +104,7 @@ const DEBUG_HITBOXES = true;
 
 function animate() {
   // debuggin text to html
-  log(charState, doc);
-
+  log(currentChapter?.title, doc);
   // antibouncer for the action button
   antiBouncer++;
 
@@ -124,11 +123,12 @@ function animate() {
     chapterType = currentChapter.type;
     i++;
     story_index = 0;
+    lastKey = '';
   }
   if (chapterType === COMIC) {
     const comic_background = doc.getElementById('comic_background');
     const dialogueComimBoxText = doc.getElementById('dialogue_box_comic_text');
-    const dialogueBox = doc.getElementById('dialogue_box_comic');
+    const dialogueBox = doc.getElementById('dialogueBox');
     const title = doc.getElementById('dialogue_box_comic_title');
     // show the scene
     canv_game.style.display = 'none';
@@ -137,15 +137,19 @@ function animate() {
     // load image
     comic_background.src = `./assets/${currentChapter.img}`;
 
+    // Update text after button press logic
+    title.innerHTML = story_index === 0 ? currentChapter.title : '';
+    dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
+
+
     // set the keyboard controls
     if (
       keys.space.pressed &&
       lastKey === ' ' &&
       antiBouncer > ANTI_BOUNCER_LIMIT
     ) {
-      console.log('ACTION BUTTON PRESSED! story_index was:', story_index);
+      
       story_index++;
-      console.log('story_index is now:', story_index);
       antiBouncer = 0;
 
       // Visual debug - flash the action button
@@ -158,18 +162,14 @@ function animate() {
       }
     }
 
-    // Update text after button press logic
-
-    title.innerHTML = story_index === 0 ? currentChapter.title : '';
-    dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
-
+    
     // set the finish command
 
     if (story_index === currentChapter.discussion.length) {
       chapterType = IDLE;
     }
-    // console.log(comic_page);
-    // dialogueBox.style.display = "inline";
+  
+    dialogueBox.style.display = "inline";
   }
   if (chapterType === GAME) {
     const dialogueBox = doc.getElementById('dialogueBox');
@@ -223,7 +223,7 @@ function animate() {
       );
       canv_game.style.display = 'inline';
       comic_page.style.display = 'none';
-
+      dialogueBox.style.display = "none";
       // interagisci
       const keyPressed = checkKeysPressed(
         keys,

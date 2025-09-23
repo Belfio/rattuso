@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="14">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="15">
  <editorsettings>
-  <export target="../data/objects.tmj" format="json"/>
+  <export target="../data/objects2.tmj" format="json"/>
  </editorsettings>
  <tileset firstgid="1" source="Modern_Office_Black_Shadow_32x32.tsx"/>
  <tileset firstgid="849" source="Room_Builder_Office_32x32.tsx"/>
@@ -14,7 +14,7 @@
  <tileset firstgid="31408" source="Body_32x32_0scuro.tsx"/>
  <tileset firstgid="33745" source="Outfit_18_32x32_02.tsx"/>
  <tileset firstgid="36041" source="Hairstyle_03_32x32_06.tsx"/>
- <layer id="3" name="Floor" width="30" height="20" visible="0">
+ <layer id="3" name="Floor" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -38,7 +38,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="7" name="External floor" width="30" height="20" visible="0">
+ <layer id="7" name="External floor" width="30" height="20">
   <data encoding="csv">
 17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,
 17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,17679,
@@ -62,7 +62,7 @@
 17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663,17663
 </data>
  </layer>
- <layer id="11" name="Floor objects" width="30" height="20" visible="0">
+ <layer id="11" name="Floor objects" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -86,7 +86,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="8" name="Rattuso" width="30" height="20" visible="0">
+ <layer id="8" name="Rattuso" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -110,7 +110,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="9" name="Rattuso Accessori" width="30" height="20" visible="0">
+ <layer id="9" name="Rattuso Accessori" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -134,7 +134,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="10" name="rattuso2" width="30" height="20" visible="0">
+ <layer id="10" name="rattuso2" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -158,7 +158,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="5" name="Walls2" width="30" height="20" visible="0">
+ <layer id="5" name="Walls2" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -182,7 +182,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="4" name="Walls" width="30" height="20" visible="0">
+ <layer id="4" name="Walls" width="30" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -305,8 +305,9 @@
  <objectgroup id="14" name="Frigo">
   <object id="2" name="Frigo" class="1" x="290.916" y="79.1609" width="27.7063" height="65.3077" visible="0"/>
   <object id="7" name="Frigo" x="288.937" y="81.1399" width="35.6224" height="67.2868"/>
+  <object id="14" x="322.581" y="176.133" width="27.7063" height="65.3077"/>
  </objectgroup>
- <objectgroup id="15" name="Object Layer 2">
+ <objectgroup id="15" name="Armadio">
   <object id="11" name="Armadio" x="162.28" y="77.1819" width="53.4336" height="71.2448"/>
  </objectgroup>
 </map>

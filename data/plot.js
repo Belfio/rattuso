@@ -5,13 +5,13 @@ export const plot = {
   story: [
     // Chapter 1: Opening comic scene - COMMENTED OUT FOR DEBUGGING
     // Uncomment this section to enable the intro comic scene
-    /*
+  
     {
       title: "Ogliastra di fuoco", // Chapter title: "Fire of Ogliastra"
       type: COMIC, // Comic scene type - image background with text overlay
       img: "d_casa.jpg", // Background image for the comic scene
       discussion: [ // Array of text segments that advance on user input
-        "Si definisce rattuso in lingua napoletana (più delle volte in volgare) la figura di uomo di mezza età che cerca di mettersi in bella mostra nei confronti di ragazze poco più che maggiorenni. Il "Rattuso" nella società napoletana non viene accostato alla figura del pedofilo o dello stupratore, bensì viene più che altro visto come una figura penosa e marginale.",
+        `Si definisce rattuso in lingua napoletana (più delle volte in volgare) la figura di uomo di mezza età che cerca di mettersi in bella mostra nei confronti di ragazze poco più che maggiorenni. Il "Rattuso" nella società napoletana non viene accostato alla figura del pedofilo o dello stupratore, bensì viene più che altro visto come una figura penosa e marginale.`,
         "Porco Dighel.",
         "Questa è l'unica eredità che mi ha lasciato quel terrone di mio padre: un cognome di merda.",
         "Per il resto altro non sono che un pezzo di carne di quarantasei anni sull'orlo di una crisi di mezz'età a servizio dello Stato.",
@@ -23,7 +23,7 @@ export const plot = {
         "KNOCK KNOCK...",
       ],
     },
-    */
+    
     // Chapter 2: First gameplay scene - Inside the house
     // Interactive game scene where player can move around and interact with NPCs.
     // Uses the camera/viewport system for mobile-friendly movement.
@@ -187,6 +187,15 @@ export const plot = {
             },
           },
         },
+      ],
+    },
+    {
+      title: "Macchina", // Chapter title: "Fire of Ogliastra"
+      type: COMIC, // Comic scene type - image background with text overlay
+      img: "d_casa.jpg", // Background image for the comic scene
+      discussion: [ // Array of text segments that advance on user input
+        "Andiamo in macchina, dai.",
+        "C'è un cazzo di macchina qui?",
       ],
     },
   ],

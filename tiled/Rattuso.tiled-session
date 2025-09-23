@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "casa.tmx",
+    "activeFile": "ufficio2.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -80,15 +80,31 @@
         },
         "casa.tmx": {
             "scale": 0.5053,
-            "selectedLayer": 0,
+            "selectedLayer": 12,
             "viewCenter": {
-                "x": 583.8115970710469,
-                "y": 539.2835939046112
+                "x": 619.4339996041956,
+                "y": 745.101919651692
             }
         },
         "tileset.tsx": {
             "scaleInDock": 1.0091,
             "scaleInEditor": 1
+        },
+        "ufficio.tmx": {
+            "scale": 0.7659374999999999,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 480.45695634434935,
+                "y": 320.52223582211343
+            }
+        },
+        "ufficio2.tmx": {
+            "scale": 0.6253,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 428.59427474812094,
+                "y": 397.4092435630898
+            }
         }
     },
     "last.exportedFilePath": "/Users/alfredo/NonBackedUp/Code/rattuso/data",
@@ -100,12 +116,16 @@
     "map.width": 30,
     "openFiles": [
         "casa.tmx",
-        "Basic Grass Biom things 1.tsx"
+        "Basic Grass Biom things 1.tsx",
+        "ufficio2.tmx",
+        "ufficio.tmx"
     ],
     "project": "Rattuso.tiled-project",
     "recentFiles": [
         "casa.tmx",
         "Basic Grass Biom things 1.tsx",
+        "ufficio.tmx",
+        "ufficio2.tmx",
         "Room_Builder_free_16x16.tsx",
         "tileset.tsx",
         "/Users/alfredo/Downloads/Tiled/Pellet Town.tmx"
