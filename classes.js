@@ -18,10 +18,23 @@ export class Sprite {
     this.position = position;
     this.image = new Image();
     this.frames = { ...frames, val: 0, elapsed: 0 };
+    this.imageLoaded = false;
+    this.imageError = false;
+
     this.image.onload = () => {
       this.width = (this.image.width / this.frames.max) * scale;
       this.height = this.image.height * scale;
+      this.imageLoaded = true;
     };
+
+    this.image.onerror = () => {
+      console.error(`Failed to load image: ${image.src}`);
+      this.imageError = true;
+      // Set default dimensions if image fails to load
+      this.width = 32 * scale;
+      this.height = 32 * scale;
+    };
+
     this.image.src = image.src;
 
     this.animate = animate;
@@ -68,17 +81,29 @@ export class Sprite {
       height: this.image.height,
     };
 
-    c.drawImage(
-      this.image,
-      crop.position.x,
-      crop.position.y,
-      crop.width,
-      crop.height,
-      image.position.x,
-      image.position.y,
-      image.width * this.scale,
-      image.height * this.scale
-    );
+    // Check if image is loaded and not broken before drawing
+    if (this.image && this.image.complete && this.image.naturalWidth > 0) {
+      c.drawImage(
+        this.image,
+        crop.position.x,
+        crop.position.y,
+        crop.width,
+        crop.height,
+        image.position.x,
+        image.position.y,
+        image.width * this.scale,
+        image.height * this.scale
+      );
+    } else {
+      // Draw a placeholder rectangle if image failed to load
+      c.fillStyle = 'rgba(255, 0, 255, 0.5)'; // Magenta placeholder
+      c.fillRect(
+        image.position.x,
+        image.position.y,
+        image.width * this.scale,
+        image.height * this.scale
+      );
+    }
 
     c.restore();
 

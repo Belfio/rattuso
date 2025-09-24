@@ -69,6 +69,7 @@ function resizeCanvas() {
   }
 }
 
+
 // Initialize canvas
 setupCanvas();
 window.addEventListener('resize', resizeCanvas);

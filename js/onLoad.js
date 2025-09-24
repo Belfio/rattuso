@@ -46,7 +46,7 @@ export const loadRenderables = chapter => {
 
   // Get background image dimensions to prevent grey canvas exposure
   const backgroundImage = new Image();
-  backgroundImage.src = `../assets/${chapter.background}`;
+  backgroundImage.src = `./assets/${chapter.background}`;
 
   // Player's world position from chapter data
   const originalPlayerX = chapter.player.position.x;
@@ -100,16 +100,16 @@ export const loadRenderables = chapter => {
   // foregroundImage.src = "./img/foregroundObjects.png";
 
   const playerDownImage = new Image();
-  playerDownImage.src = '../assets/playerDown.png';
+  playerDownImage.src = './assets/playerDown.png';
 
   const playerUpImage = new Image();
-  playerUpImage.src = '../assets/playerUp.png';
+  playerUpImage.src = './assets/playerUp.png';
 
   const playerLeftImage = new Image();
-  playerLeftImage.src = '../assets/playerLeft.png';
+  playerLeftImage.src = './assets/playerLeft.png';
 
   const playerRightImage = new Image();
-  playerRightImage.src = '../assets/playerRight.png';
+  playerRightImage.src = './assets/playerRight.png';
 
   // Calculate final player screen position
   // If we can center the player (background wasn't clamped), player goes to center
@@ -166,16 +166,16 @@ export const loadRenderables = chapter => {
 
   chapter.characters.forEach(character => {
     const characterDownImage = new Image();
-    characterDownImage.src = '../assets/playerDown.png';
+    characterDownImage.src = './assets/playerDown.png';
 
     const characterUpImage = new Image();
-    characterUpImage.src = '../assets/playerUp.png';
+    characterUpImage.src = './assets/playerUp.png';
 
     const characterLeftImage = new Image();
-    characterLeftImage.src = '../assets/playerLeft.png';
+    characterLeftImage.src = './assets/playerLeft.png';
 
     const characterRightImage = new Image();
-    characterRightImage.src = '../assets/playerRight.png';
+    characterRightImage.src = './assets/playerRight.png';
     const characterImages = {
       up: characterUpImage,
       down: characterDownImage,
