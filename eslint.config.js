@@ -29,16 +29,19 @@ export default [
     },
     rules: {
       'prettier/prettier': 'error',
-      'no-unused-vars': ['warn', {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-        ignoreRestSiblings: true
-      }],
+      'no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
       'no-console': 'off', // Allow console for game debugging
       'prefer-const': 'error',
       'no-var': 'error',
-      'eqeqeq': ['error', 'always', { null: 'ignore' }],
-      'curly': ['error', 'all'],
+      eqeqeq: ['error', 'always', { null: 'ignore' }],
+      curly: ['error', 'all'],
       'no-undef': 'warn', // Warn instead of error for game development
       'no-case-declarations': 'off', // Allow declarations in case blocks for game logic
     },

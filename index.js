@@ -1,3 +1,13 @@
+// Update status
+const updateStatus = msg => {
+  const status = document.getElementById('status');
+  if (status) {
+    status.innerHTML = msg;
+  }
+};
+
+updateStatus('Loading modules...');
+
 import { loadRenderables } from './js/onLoad.js';
 import { canvas, doc } from './classes.js';
 import { keys, IDLE, COMIC, GAME } from './js/constants.js';
@@ -69,6 +79,7 @@ function resizeCanvas() {
   }
 }
 
+updateStatus('Modules loaded, initializing...');
 
 // Initialize canvas
 setupCanvas();
@@ -117,7 +128,7 @@ function animate() {
   if (chapterType === IDLE) {
     chapterEnd = false;
     currentChapter = plot.story[i];
-    if(!currentChapter) {
+    if (!currentChapter) {
       console.log('currentChapter is not set');
       return;
     }
@@ -142,14 +153,12 @@ function animate() {
     title.innerHTML = story_index === 0 ? currentChapter.title : '';
     dialogueComimBoxText.innerHTML = currentChapter.discussion[story_index];
 
-
     // set the keyboard controls
     if (
       keys.space.pressed &&
       lastKey === ' ' &&
       antiBouncer > ANTI_BOUNCER_LIMIT
     ) {
-      
       story_index++;
       antiBouncer = 0;
 
@@ -163,14 +172,13 @@ function animate() {
       }
     }
 
-    
     // set the finish command
 
     if (story_index === currentChapter.discussion.length) {
       chapterType = IDLE;
     }
-  
-    dialogueBox.style.display = "inline";
+
+    dialogueBox.style.display = 'inline';
   }
   if (chapterType === GAME) {
     const dialogueBox = doc.getElementById('dialogueBox');
@@ -204,8 +212,8 @@ function animate() {
       objects.forEach(o => {
         const w = o.collisionWidth || o.width || 0;
         const h = o.collisionHeight || o.height || 0;
-        const ox = (o.collisionOffsetX || 0);
-        const oy = (o.collisionOffsetY || 0);
+        const ox = o.collisionOffsetX || 0;
+        const oy = o.collisionOffsetY || 0;
         ctx.strokeRect(o.position.x + ox, o.position.y + oy, w, h);
       });
       ctx.restore();
@@ -224,7 +232,7 @@ function animate() {
       );
       canv_game.style.display = 'inline';
       comic_page.style.display = 'none';
-      dialogueBox.style.display = "none";
+      dialogueBox.style.display = 'none';
       // interagisci
       const keyPressed = checkKeysPressed(
         keys,
@@ -235,8 +243,16 @@ function animate() {
       if (keyPressed === 'action') {
         console.log('checkForPlayerCollision');
         console.log(player.position.x, player.position.y);
-        console.log(objects[1].name, objects[1].position.x-objects[1].width/2, objects[1].position.y-objects[1].height/2);
-        console.log(objects[0].name, objects[0].position.x-objects[0].width/2, objects[0].position.y-objects[0].height/2);
+        console.log(
+          objects[1].name,
+          objects[1].position.x - objects[1].width / 2,
+          objects[1].position.y - objects[1].height / 2
+        );
+        console.log(
+          objects[0].name,
+          objects[0].position.x - objects[0].width / 2,
+          objects[0].position.y - objects[0].height / 2
+        );
         antiBouncer = 0;
         checkForPlayerCollision({
           characters,
@@ -321,6 +337,7 @@ function animate() {
   }
 }
 
+updateStatus('Starting game loop...');
 animate();
 
 window.addEventListener('keydown', e => {

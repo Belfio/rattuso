@@ -5,25 +5,26 @@ export const plot = {
   story: [
     // Chapter 1: Opening comic scene - COMMENTED OUT FOR DEBUGGING
     // Uncomment this section to enable the intro comic scene
-  
+
     {
-      title: "Ogliastra di fuoco", // Chapter title: "Fire of Ogliastra"
+      title: 'Ogliastra di fuoco', // Chapter title: "Fire of Ogliastra"
       type: COMIC, // Comic scene type - image background with text overlay
-      img: "d_casa.jpg", // Background image for the comic scene
-      discussion: [ // Array of text segments that advance on user input
+      img: 'd_casa.jpg', // Background image for the comic scene
+      discussion: [
+        // Array of text segments that advance on user input
         `Si definisce rattuso in lingua napoletana (più delle volte in volgare) la figura di uomo di mezza età che cerca di mettersi in bella mostra nei confronti di ragazze poco più che maggiorenni. Il "Rattuso" nella società napoletana non viene accostato alla figura del pedofilo o dello stupratore, bensì viene più che altro visto come una figura penosa e marginale.`,
-        "Porco Dighel.",
+        'Porco Dighel.',
         "Questa è l'unica eredità che mi ha lasciato quel terrone di mio padre: un cognome di merda.",
         "Per il resto altro non sono che un pezzo di carne di quarantasei anni sull'orlo di una crisi di mezz'età a servizio dello Stato.",
-        "...forse oggi non mi lavo; rimango così, come il tenente Willard di Apocalypse Now. Che figata.",
-        "Ma questa non è Saigon.",
-        "Jerzu, merda...",
-        "Mi avevano promesso che nel trasferimento in Sardegna non ci sarebbe stato niente di punitivo.",
-        "Avevo bisogno di staccare da Milano, questo sì. Avevo bisogno di liberare la testa da quella brutta faccenda, fare ordine nei pensieri e magari, perché no, conoscere qualche bimba...",
-        "KNOCK KNOCK...",
+        '...forse oggi non mi lavo; rimango così, come il tenente Willard di Apocalypse Now. Che figata.',
+        'Ma questa non è Saigon.',
+        'Jerzu, merda...',
+        'Mi avevano promesso che nel trasferimento in Sardegna non ci sarebbe stato niente di punitivo.',
+        'Avevo bisogno di staccare da Milano, questo sì. Avevo bisogno di liberare la testa da quella brutta faccenda, fare ordine nei pensieri e magari, perché no, conoscere qualche bimba...',
+        'KNOCK KNOCK...',
       ],
     },
-    
+
     // Chapter 2: First gameplay scene - Inside the house
     // Interactive game scene where player can move around and interact with NPCs.
     // Uses the camera/viewport system for mobile-friendly movement.
@@ -104,7 +105,7 @@ export const plot = {
         {
           type: 'object',
           name: 'armadio',
-          position: { x: 144, y: 81},
+          position: { x: 144, y: 81 },
           width: 30,
           height: 74,
           interactions: {
@@ -118,7 +119,6 @@ export const plot = {
                       option: 'Apri',
                       next: 1,
                     },
-                    
                   ],
                 },
                 {
@@ -132,7 +132,7 @@ export const plot = {
         {
           type: 'object',
           name: 'frigo',
-          position: { x: 290, y: 81},
+          position: { x: 290, y: 81 },
           width: 35,
           height: 74,
           interactions: {
@@ -146,7 +146,6 @@ export const plot = {
                       option: 'Apri',
                       next: 1,
                     },
-                    
                   ],
                 },
                 {
@@ -160,7 +159,7 @@ export const plot = {
         {
           type: 'object',
           name: 'scrivania',
-          position: { x: 290, y: 160},
+          position: { x: 290, y: 160 },
           width: 40,
           height: 75,
           interactions: {
@@ -174,15 +173,13 @@ export const plot = {
                       option: 'Accendi PC',
                       next: 1,
                     },
-                    { option: 'Fai finta di niente', next: 'END' }
-
+                    { option: 'Fai finta di niente', next: 'END' },
                   ],
-
                 },
                 {
                   a: 'Srivania',
                   b: [{ option: '> 415 email...', next: 'END' }], // Single response option
-                }
+                },
               ],
             },
           },
@@ -190,11 +187,12 @@ export const plot = {
       ],
     },
     {
-      title: "Macchina", // Chapter title: "Fire of Ogliastra"
+      title: 'Macchina', // Chapter title: "Fire of Ogliastra"
       type: COMIC, // Comic scene type - image background with text overlay
-      img: "d_casa.jpg", // Background image for the comic scene
-      discussion: [ // Array of text segments that advance on user input
-        "Andiamo in macchina, dai.",
+      img: 'd_casa.jpg', // Background image for the comic scene
+      discussion: [
+        // Array of text segments that advance on user input
+        'Andiamo in macchina, dai.',
         "C'è un cazzo di macchina qui?",
       ],
     },

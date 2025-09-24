@@ -17,7 +17,7 @@ const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
 
   collisionsMap.forEach((row, i) => {
     row.forEach((symbol, j) => {
-      if (symbol != 0) {
+      if (symbol !== 0) {
         const boundary = new Boundary({
           position: {
             x: j * Boundary.width + offsetX,
@@ -34,7 +34,6 @@ const loadCollisions = (collisionObjects, offsetX = 0, offsetY = 0) => {
 
   return boundaries;
 };
-
 
 export const loadRenderables = chapter => {
   const characters = [];
@@ -94,7 +93,6 @@ export const loadRenderables = chapter => {
     backgroundOffsetX,
     backgroundOffsetY
   );
-
 
   const foregroundImage = new Image();
   // foregroundImage.src = "./img/foregroundObjects.png";
@@ -202,11 +200,14 @@ export const loadRenderables = chapter => {
       })
     );
   });
-  
-  const objects = []
-  chapter.objects.forEach(object => { 
+
+  const objects = [];
+  chapter.objects.forEach(object => {
     const sprite = new Sprite({
-      position: { x: object.position.x + backgroundOffsetX, y: object.position.y + backgroundOffsetY },
+      position: {
+        x: object.position.x + backgroundOffsetX,
+        y: object.position.y + backgroundOffsetY,
+      },
       image: playerDownImage,
       frames: { max: 1, hold: 10 },
       sprites: {},
